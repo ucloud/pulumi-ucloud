@@ -15,6 +15,7 @@
 package ucloud
 
 import (
+	"strings"
 	"unicode"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -125,30 +126,49 @@ func Provider() tfbridge.ProviderInfo {
 					EnvVars: []string{"UCLOUD_PROJECT_ID", "UCloud Project Id"},
 				},
 			},
+			"base_url": {
+				Type: makeType("base_url", "string"),
+			},
+			"max_retries": {
+				Type: makeType("max_retries", "number"),
+				Default: &tfbridge.DefaultInfo{
+					Value: 0,
+				},
+			},
+			"insecure": {
+				Type: makeType("insecure", "bool"),
+				Default: &tfbridge.DefaultInfo{
+					Value: false,
+				},
+			},
+			"profile": {
+				Type: makeType("profile", "string"),
+				Default: &tfbridge.DefaultInfo{
+					EnvVars: []string{"UCLOUD_PROFILE", "UCloud Profile Name"},
+				},
+			},
+			"shared_credentials_file": {
+				Type: makeType("shared_credentials_file", "string"),
+				Default: &tfbridge.DefaultInfo{
+					EnvVars: []string{"UCLOUD_SHARED_CREDENTIAL_FILE", "Path To The Shared Credentials File"},
+				},
+			},
 		},
 		PreConfigureCallback: preConfigureCallback,
-		Resources: map[string]*tfbridge.ResourceInfo{
-			// Map each resource in the Terraform provider to a Pulumi type. Two examples
-			// are below - the single line form is the common case. The multi-line form is
-			// needed only if you wish to override types or other default options.
-			//
-			// "aws_iam_role": {Tok: makeResource(mainMod, "IamRole")}
-			//
-			// "aws_acm_certificate": {
-			// 	Tok: makeResource(mainMod, "Certificate"),
-			// 	Fields: map[string]*tfbridge.SchemaInfo{
-			// 		"tags": {Type: makeType(mainPkg, "Tags")},
-			// 	},
-			// },
-			"ucloud_vpc":    {Tok: makeResource("ucloud_vpc", "VPC")},
-			"ucloud_subnet": {Tok: makeResource("ucloud_vpc", "Subnet")},
-		},
-		DataSources: map[string]*tfbridge.DataSourceInfo{
+		Resources:            make(map[string]*tfbridge.ResourceInfo, len(p.ResourcesMap)),
+		DataSources:          map[string]*tfbridge.DataSourceInfo{
 			// Map each resource in the Terraform provider to a Pulumi function. An example
 			// is below.
 			// "aws_ami": {Tok: makeDataSource(mainMod, "getAmi")},
 		},
 		Golang: &tfbridge.GolangInfo{},
+	}
+
+	for name, _ := range p.ResourcesMap {
+		resStructName := ToStructName(name)
+		prov.Resources[name] = &tfbridge.ResourceInfo{
+			Tok: makeResource(name, resStructName),
+		}
 	}
 
 	// For all resources with name properties, we will add an auto-name property.  Make sure to skip those that
@@ -169,4 +189,14 @@ func Provider() tfbridge.ProviderInfo {
 	}
 
 	return prov
+}
+
+func ToStructName(resName string) string {
+	result := ""
+	trimedResName := strings.TrimPrefix(resName, "ucloud_")
+	for _, part := range strings.Split(trimedResName, "_") {
+		println(resName)
+		result += strings.Title(part)
+	}
+	return result
 }
