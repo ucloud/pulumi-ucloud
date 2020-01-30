@@ -5,6 +5,7 @@ package examples
 import (
 	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -15,10 +16,10 @@ import (
 
 func TestExamples(t *testing.T) {
 	// Ensure we have any required configuration points
-	// region := os.Getenv("AWS_REGION")
-	// if region == "" {
-	// 	t.Skipf("Skipping test due to missing AWS_REGION environment variable")
-	// }
+	region := os.Getenv("UCLOUD_REGION")
+	if region == "" {
+		t.Skipf("Skipping test due to missing AWS_REGION environment variable")
+	}
 	// cwd, err := os.Getwd()
 	// if !assert.NoError(t, err, "expected a valid working directory: %v", err) {
 	// 	return
@@ -31,7 +32,7 @@ func TestExamples(t *testing.T) {
 		},
 		Tracing: "https://tracing.pulumi-engineering.com/collector/api/v1/spans",
 	}
-	_ := base.With(integration.ProgramTestOptions{
+	_ = base.With(integration.ProgramTestOptions{
 		Dependencies: []string{
 			// JavaScript dependencies
 		},

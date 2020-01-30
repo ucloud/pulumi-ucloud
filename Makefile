@@ -40,7 +40,7 @@ prepare::
 # We set the PLUGIN_VERSION to be the same as the version we use when building
 # the provider (e.g. x.y.z-dev-... instead of x.y.zdev...)
 build:: tfgen provider
-	for LANGUAGE in "go" ; do \
+	for LANGUAGE in "nodejs" "python" "go" ; do \
 		$(TFGEN) $$LANGUAGE --overlays overlays/$$LANGUAGE/ --out ${PACKDIR}/$$LANGUAGE/ || exit 3 ; \
 	done
 	cd ${PACKDIR}/nodejs/ && \
@@ -73,7 +73,14 @@ lint::
 install::
 	GOBIN=$(PULUMI_BIN) go install -ldflags "-X github.com/pulumi/pulumi-${PACK}/pkg/version.Version=${VERSION}" ${PROJECT}/cmd/${PROVIDER}
 	[ ! -e "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)" ] || rm -rf "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
-
+	mkdir -p "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
+	cp -r ${PACKDIR}/nodejs/bin/. "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
+	rm -rf "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)/node_modules"
+	cd "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)" && \
+		yarn install --offline --production && \
+		(yarn unlink > /dev/null 2>&1 || true) && \
+		yarn link
+	cd ${PACKDIR}/python/bin && $(PIP) install --user -e .
 
 test_all::
 	PATH=$(PULUMI_BIN):$(PATH) go test -v -count=1 -cover -timeout 1h -parallel ${TESTPARALLELISM} ./examples

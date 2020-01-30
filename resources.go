@@ -31,8 +31,45 @@ const (
 	// packages:
 	mainPkg = "ucloud"
 	// modules:
-	mainMod = "index" // the y module
+	mainMod     = "index" // the y module
+	UHostRes    = "uhost"
+	UNetRes     = "unet"
+	ULBRes      = "ulb"
+	VpcRes      = "vpc"
+	UDBRes      = "udb"
+	UMemRes     = "umem"
+	IpSecVPNRes = "ipsecvpn"
+	UDPNRes     = "udpn"
 )
+
+var resModMaps = map[string]string{
+	"ucloud_instance":               UHostRes,
+	"ucloud_disk":                   UHostRes,
+	"ucloud_disk_attachment":        UHostRes,
+	"ucloud_isolation_group":        UHostRes,
+	"ucloud_security_group":         UNetRes,
+	"ucloud_eip":                    UNetRes,
+	"ucloud_eip_association":        UNetRes,
+	"ucloud_lb":                     ULBRes,
+	"ucloud_lb_attachment":          ULBRes,
+	"ucloud_lb_listener":            ULBRes,
+	"ucloud_lb_rule":                ULBRes,
+	"ucloud_lb_ssl":                 ULBRes,
+	"ucloud_lb_ssl_attachment":      ULBRes,
+	"ucloud_vpc":                    VpcRes,
+	"ucloud_vpc_peering_connection": VpcRes,
+	"ucloud_subnet":                 VpcRes,
+	"ucloud_nat_gateway":            VpcRes,
+	"ucloud_nat_gateway_rule":       VpcRes,
+	"ucloud_vip":                    VpcRes,
+	"ucloud_db_instance":            UDBRes,
+	"ucloud_redis_instance":         UMemRes,
+	"ucloud_memcache_instance":      UMemRes,
+	"ucloud_vpn_gateway":            IpSecVPNRes,
+	"ucloud_vpn_customer_gateway":   IpSecVPNRes,
+	"ucloud_vpn_connection":         IpSecVPNRes,
+	"ucloud_udpn_connection":        UDPNRes,
+}
 
 // makeMember manufactures a type token for the package and the given module and type.
 func makeMember(mod string, mem string) tokens.ModuleMember {
@@ -103,52 +140,36 @@ func Provider() tfbridge.ProviderInfo {
 			// Add any required configuration here, or remove the example below if
 			// no additional points are required.
 			"region": {
-				Type: makeType("region", "string"),
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_REGION", "UCLOUD_DEFAULT_REGION"},
 				},
 			},
 			"public_key": {
-				Type: makeType("public_key", "string"),
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_PUBLIC_KEY", "UCloud Public Key"},
 				},
 			},
 			"private_key": {
-				Type: makeType("private_key", "string"),
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_PRIVATE_KEY", "UCloud Private Key"},
 				},
 			},
 			"project_id": {
-				Type: makeType("project_id", "string"),
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_PROJECT_ID", "UCloud Project Id"},
 				},
 			},
 			"base_url": {
-				Type: makeType("base_url", "string"),
+				// Type: makeType("base_url", "BaseUrl"),
 			},
-			"max_retries": {
-				Type: makeType("max_retries", "number"),
-				Default: &tfbridge.DefaultInfo{
-					Value: 0,
-				},
-			},
-			"insecure": {
-				Type: makeType("insecure", "bool"),
-				Default: &tfbridge.DefaultInfo{
-					Value: false,
-				},
-			},
+			"max_retries": {},
+			"insecure":    {},
 			"profile": {
-				Type: makeType("profile", "string"),
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_PROFILE", "UCloud Profile Name"},
 				},
 			},
 			"shared_credentials_file": {
-				Type: makeType("shared_credentials_file", "string"),
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_SHARED_CREDENTIAL_FILE", "Path To The Shared Credentials File"},
 				},
@@ -161,21 +182,41 @@ func Provider() tfbridge.ProviderInfo {
 			// is below.
 			// "aws_ami": {Tok: makeDataSource(mainMod, "getAmi")},
 		},
+		JavaScript: &tfbridge.JavaScriptInfo{
+			// List any npm dependencies and their versions
+			Dependencies: map[string]string{
+				"@pulumi/pulumi": "latest",
+			},
+			DevDependencies: map[string]string{
+				"@types/node": "^8.0.25", // so we can access strongly typed node definitions.
+				"@types/mime": "^2.0.0",
+			},
+			// See the documentation for tfbridge.OverlayInfo for how to lay out this
+			// section, or refer to the AWS provider. Delete this section if there are
+			// no overlay files.
+			//Overlay: &tfbridge.OverlayInfo{},
+		},
+		Python: &tfbridge.PythonInfo{
+			// List any Python dependencies and their version ranges
+			Requires: map[string]string{
+				"pulumi": ">=1.0.0,<2.0.0",
+			},
+		},
 		Golang: &tfbridge.GolangInfo{},
 	}
 
 	for name, _ := range p.ResourcesMap {
 		resStructName := ToStructName(name)
 		prov.Resources[name] = &tfbridge.ResourceInfo{
-			Tok: makeResource(name, resStructName),
+			Tok: makeResource(resModMaps[name], resStructName),
 		}
 	}
 
 	// For all resources with name properties, we will add an auto-name property.  Make sure to skip those that
 	// already have a name mapping entry, since those may have custom overrides set above (e.g., for length).
 	const nameProperty = "name"
-	for resname, res := range prov.Resources {
-		if schema := p.ResourcesMap[resname]; schema != nil {
+	for resName, res := range prov.Resources {
+		if schema := p.ResourcesMap[resName]; schema != nil {
 			// Only apply auto-name to input properties (Optional || Required) named `name`
 			if tfs, has := schema.Schema[nameProperty]; has && (tfs.Optional || tfs.Required) {
 				if _, hasfield := res.Fields[nameProperty]; !hasfield {
@@ -195,7 +236,6 @@ func ToStructName(resName string) string {
 	result := ""
 	trimedResName := strings.TrimPrefix(resName, "ucloud_")
 	for _, part := range strings.Split(trimedResName, "_") {
-		println(resName)
 		result += strings.Title(part)
 	}
 	return result
