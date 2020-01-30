@@ -1,4 +1,4 @@
-module github.com/pulumi/pulumi-ucloud
+module github.com/lonegunmanb/pulumi-ucloud
 
 go 1.13
 
