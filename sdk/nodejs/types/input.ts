@@ -4,6 +4,10 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as inputs from "../types/input";
 
+
+export namespace udb {
+}
+
 export namespace uhost {
     export interface InstanceDiskSet {
         id?: pulumi.Input<string>;

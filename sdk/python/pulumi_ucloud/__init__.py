@@ -10,4 +10,6 @@ for pkg in __all__:
         importlib.import_module(f'{__name__}.{pkg}')
 
 # Export this package's modules as members:
+from .lookup_projects import *
+from .lookup_zones import *
 from .provider import *

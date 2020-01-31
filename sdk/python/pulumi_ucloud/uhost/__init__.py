@@ -7,3 +7,6 @@ from .disk import *
 from .disk_attachment import *
 from .instance import *
 from .isolation_group import *
+from .lookup_disks import *
+from .lookup_images import *
+from .lookup_instances import *

@@ -8,3 +8,8 @@ export * from "./lbListener";
 export * from "./lbRule";
 export * from "./lbSsl";
 export * from "./lbSslAttachment";
+export * from "./lookupLbAttachments";
+export * from "./lookupLbListeners";
+export * from "./lookupLbRules";
+export * from "./lookupLbSsls";
+export * from "./lookupLbs";

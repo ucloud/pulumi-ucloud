@@ -32,6 +32,7 @@ const (
 	mainPkg = "ucloud"
 	// modules:
 	mainMod     = "index" // the y module
+	RootRes     = ""
 	UHostRes    = "uhost"
 	UNetRes     = "unet"
 	ULBRes      = "ulb"
@@ -41,6 +42,28 @@ const (
 	IpSecVPNRes = "ipsecvpn"
 	UDPNRes     = "udpn"
 )
+
+var dsModMaps = map[string]string{
+	"ucloud_projects":              RootRes,
+	"ucloud_zones":                 RootRes,
+	"ucloud_images":                UHostRes,
+	"ucloud_instances":             UHostRes,
+	"ucloud_disks":                 UHostRes,
+	"ucloud_eips":                  UNetRes,
+	"ucloud_security_groups":       UNetRes,
+	"ucloud_lb_ssls":               ULBRes,
+	"ucloud_lbs":                   ULBRes,
+	"ucloud_lb_listeners":          ULBRes,
+	"ucloud_lb_rules":              ULBRes,
+	"ucloud_lb_attachments":        ULBRes,
+	"ucloud_db_instances":          UDBRes,
+	"ucloud_subnets":               VpcRes,
+	"ucloud_vpcs":                  VpcRes,
+	"ucloud_nat_gateways":          VpcRes,
+	"ucloud_vpn_gateways":          IpSecVPNRes,
+	"ucloud_vpn_customer_gateways": IpSecVPNRes,
+	"ucloud_vpn_connections":       IpSecVPNRes,
+}
 
 var resModMaps = map[string]string{
 	"ucloud_instance":               UHostRes,
@@ -209,6 +232,13 @@ func Provider() tfbridge.ProviderInfo {
 		resStructName := ToStructName(name)
 		prov.Resources[name] = &tfbridge.ResourceInfo{
 			Tok: makeResource(resModMaps[name], resStructName),
+		}
+	}
+
+	for name, _ := range p.DataSourcesMap {
+		lookupFuncName := "lookup" + ToStructName(name)
+		prov.DataSources[name] = &tfbridge.DataSourceInfo{
+			Tok: makeDataSource(dsModMaps[name], lookupFuncName),
 		}
 	}
 

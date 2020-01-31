@@ -3,3 +3,4 @@
 
 // Export members:
 export * from "./dbInstance";
+export * from "./lookupDbInstances";

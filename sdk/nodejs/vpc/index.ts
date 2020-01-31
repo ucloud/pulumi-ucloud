@@ -2,6 +2,8 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 // Export members:
+export * from "./lookupSubnets";
+export * from "./lookupVpcs";
 export * from "./subnet";
 export * from "./vpc";
 export * from "./vpcPeeringConnection";

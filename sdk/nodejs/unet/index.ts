@@ -4,4 +4,6 @@
 // Export members:
 export * from "./eip";
 export * from "./eipAssociation";
+export * from "./lookupEips";
+export * from "./lookupSecurityGroups";
 export * from "./securityGroup";

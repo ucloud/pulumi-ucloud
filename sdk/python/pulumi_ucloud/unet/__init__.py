@@ -6,3 +6,5 @@
 from .eip import *
 from .eip_association import *
 from .security_group import *
+from .lookup_eips import *
+from .lookup_security_groups import *

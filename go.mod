@@ -1,4 +1,4 @@
-module github.com/lonegunmanb/pulumi-ucloud
+module github.com/pulumi/pulumi-ucloud
 
 go 1.13
 
@@ -18,6 +18,7 @@ require (
 	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
 	github.com/ahmetb/go-linq v3.0.0+incompatible
 	github.com/hashicorp/terraform v0.12.9
+	github.com/pkg/errors v0.8.1
 	github.com/pulumi/pulumi v1.1.0
 	github.com/pulumi/pulumi-terraform v0.18.4-0.20190914112649-fc132172e90d
 	github.com/stretchr/testify v1.4.0

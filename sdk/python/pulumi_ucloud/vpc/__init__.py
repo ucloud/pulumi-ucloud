@@ -6,3 +6,5 @@
 from .subnet import *
 from .vpc import *
 from .vpc_peering_connection import *
+from .lookup_subnets import *
+from .lookup_vpcs import *

@@ -6,3 +6,6 @@ export * from "./disk";
 export * from "./diskAttachment";
 export * from "./instance";
 export * from "./isolationGroup";
+export * from "./lookupDisks";
+export * from "./lookupImages";
+export * from "./lookupInstances";

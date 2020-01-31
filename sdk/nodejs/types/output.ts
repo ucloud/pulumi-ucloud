@@ -4,6 +4,47 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as outputs from "../types/output";
 
+export interface LookupProjectsProject {
+    createTime: string;
+    id: string;
+    memberCount: number;
+    name: string;
+    parentId: string;
+    parentName: string;
+    resourceCount: number;
+}
+
+export interface LookupZonesZone {
+    id: string;
+}
+
+export namespace udb {
+    export interface LookupDbInstancesDbInstance {
+        availabilityZone: string;
+        backupBeginTime: number;
+        backupBlackLists: string[];
+        backupCount: number;
+        backupDate: string;
+        chargeType: string;
+        createTime: string;
+        engine: string;
+        engineVersion: string;
+        expireTime: string;
+        id: string;
+        instanceStorage: number;
+        instanceType: string;
+        modifyTime: string;
+        name: string;
+        port: number;
+        privateIp: string;
+        standbyZone: string;
+        status: string;
+        subnetId: string;
+        tag: string;
+        vpcId: string;
+    }
+}
+
 export namespace uhost {
     export interface InstanceDiskSet {
         id: string;
@@ -16,10 +57,124 @@ export namespace uhost {
         internetType: string;
         ip: string;
     }
+
+    export interface LookupDisksDisk {
+        availabilityZone: string;
+        chargeType: string;
+        createTime: string;
+        diskSize: number;
+        diskType: string;
+        expireTime: string;
+        id: string;
+        name: string;
+        status: string;
+        tag: string;
+    }
+
+    export interface LookupImagesImage {
+        availabilityZone: string;
+        createTime: string;
+        description: string;
+        features: string[];
+        id: string;
+        name: string;
+        osName: string;
+        osType: string;
+        size: number;
+        status: string;
+        type: string;
+    }
+
+    export interface LookupInstancesInstance {
+        autoRenew: boolean;
+        availabilityZone: string;
+        chargeType: string;
+        cpu: number;
+        createTime: string;
+        diskSets: outputs.uhost.LookupInstancesInstanceDiskSet[];
+        expireTime: string;
+        id: string;
+        instanceType: string;
+        ipSets: outputs.uhost.LookupInstancesInstanceIpSet[];
+        memory: number;
+        name: string;
+        privateIp: string;
+        remark: string;
+        status: string;
+        subnetId: string;
+        tag: string;
+        vpcId: string;
+    }
+
+    export interface LookupInstancesInstanceDiskSet {
+        id: string;
+        isBoot: boolean;
+        size: number;
+        type: string;
+    }
+
+    export interface LookupInstancesInstanceIpSet {
+        internetType: string;
+        ip: string;
+    }
 }
 
 export namespace ulb {
     export interface LbIpSet {
+        internetType: string;
+        ip: string;
+    }
+
+    export interface LookupLbAttachmentsLbAttachment {
+        id: string;
+        port: number;
+        privateIp: string;
+        resourceId: string;
+        status: string;
+    }
+
+    export interface LookupLbListenersLbListener {
+        domain: string;
+        healthCheckType: string;
+        id: string;
+        idleTimeout: number;
+        listenType: string;
+        method: string;
+        name: string;
+        path: string;
+        persistence: string;
+        persistenceType: string;
+        port: number;
+        protocol: string;
+        status: string;
+    }
+
+    export interface LookupLbRulesLbRule {
+        domain: string;
+        id: string;
+        path: string;
+    }
+
+    export interface LookupLbSslsLbSsl {
+        createTime: string;
+        id: string;
+        name: string;
+    }
+
+    export interface LookupLbsLb {
+        createTime: string;
+        id: string;
+        internal: boolean;
+        ipSets: outputs.ulb.LookupLbsLbIpSet[];
+        name: string;
+        privateIp: string;
+        remark: string;
+        subnetId: string;
+        tag: string;
+        vpcId: string;
+    }
+
+    export interface LookupLbsLbIpSet {
         internetType: string;
         ip: string;
     }
@@ -48,6 +203,42 @@ export namespace unet {
         type: string;
     }
 
+    export interface LookupEipsEip {
+        bandwidth: number;
+        chargeMode: string;
+        chargeType: string;
+        createTime: string;
+        expireTime: string;
+        ipSets: outputs.unet.LookupEipsEipIpSet[];
+        name: string;
+        remark: string;
+        status: string;
+        tag: string;
+    }
+
+    export interface LookupEipsEipIpSet {
+        internetType: string;
+        ip: string;
+    }
+
+    export interface LookupSecurityGroupsSecurityGroup {
+        createTime: string;
+        id: string;
+        name: string;
+        remark: string;
+        rules: outputs.unet.LookupSecurityGroupsSecurityGroupRule[];
+        tag: string;
+        type: string;
+    }
+
+    export interface LookupSecurityGroupsSecurityGroupRule {
+        cidrBlock: string;
+        policy: string;
+        portRange: string;
+        priority: string;
+        protocol: string;
+    }
+
     export interface SecurityGroupRule {
         cidrBlock?: string;
         policy?: string;
@@ -58,6 +249,24 @@ export namespace unet {
 }
 
 export namespace vpc {
+    export interface LookupSubnetsSubnet {
+        cidrBlock: string;
+        createTime: string;
+        id: string;
+        name: string;
+        remark: string;
+        tag: string;
+    }
+
+    export interface LookupVpcsVpc {
+        cidrBlocks: string[];
+        createTime: string;
+        id: string;
+        name: string;
+        tag: string;
+        updateTime: string;
+    }
+
     export interface VpcNetworkInfo {
         cidrBlock: string;
     }
