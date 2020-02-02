@@ -4,7 +4,7 @@
 
 import importlib
 # Make subpackages available:
-__all__ = ['config', 'udb', 'udpn', 'uhost', 'ulb', 'umem', 'unet', 'vpc']
+__all__ = ['config', 'ipsecvpn', 'udb', 'udpn', 'uhost', 'ulb', 'umem', 'unet', 'vpc']
 for pkg in __all__:
     if pkg != 'config':
         importlib.import_module(f'{__name__}.{pkg}')

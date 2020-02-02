@@ -24,13 +24,14 @@ class InstallPluginCommand(install):
                 raise
 
 def readme():
-    with open('README.rst') as f:
+    with open('README.md', encoding='utf-8') as f:
         return f.read()
 
 setup(name='pulumi_ucloud',
       version='${VERSION}',
       description='A Pulumi package for creating and managing ucloud cloud resources.',
       long_description=readme(),
+      long_description_content_type='text/markdown',
       cmdclass={
           'install': InstallPluginCommand,
       },
@@ -41,6 +42,11 @@ setup(name='pulumi_ucloud',
       },
       license='Apache-2.0',
       packages=find_packages(),
+      package_data={
+			'pulumi_ucloud': [
+				'py.typed'
+			]
+		},
       install_requires=[
           'parver>=0.2.1',
           'pulumi>=1.0.0,<2.0.0',

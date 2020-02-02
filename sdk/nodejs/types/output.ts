@@ -18,6 +18,95 @@ export interface LookupZonesZone {
     id: string;
 }
 
+export namespace ipsecvpn {
+    export interface LookupVpnConnectionsVpnConnection {
+        createTime: string;
+        customerGatewayId: string;
+        id: string;
+        ikeConfigs: outputs.ipsecvpn.LookupVpnConnectionsVpnConnectionIkeConfig[];
+        ipsecConfigs: outputs.ipsecvpn.LookupVpnConnectionsVpnConnectionIpsecConfig[];
+        name: string;
+        remark: string;
+        tag: string;
+        vpcId: string;
+        vpnGatewayId: string;
+    }
+
+    export interface LookupVpnConnectionsVpnConnectionIkeConfig {
+        authenticationAlgorithm: string;
+        dhGroup: string;
+        encryptionAlgorithm: string;
+        exchangeMode: string;
+        ikeVersion: string;
+        localId: string;
+        preSharedKey: string;
+        remoteId: string;
+        saLifeTime: number;
+    }
+
+    export interface LookupVpnConnectionsVpnConnectionIpsecConfig {
+        authenticationAlgorithm: string;
+        encryptionAlgorithm: string;
+        localSubnetIds: string[];
+        pfsDhGroup: string;
+        protocol: string;
+        remoteSubnets: string[];
+        saLifeTime: number;
+        saLifeTimeBytes: number;
+    }
+
+    export interface LookupVpnCustomerGatewaysVpnCustomerGateway {
+        createTime: string;
+        id: string;
+        ipAddress: string;
+        name: string;
+        remark: string;
+        tag: string;
+    }
+
+    export interface LookupVpnGatewaysVpnGateway {
+        autoRenew: boolean;
+        chargeType: string;
+        createTime: string;
+        expireTime: string;
+        grade: string;
+        id: string;
+        ipSets: outputs.ipsecvpn.LookupVpnGatewaysVpnGatewayIpSet[];
+        name: string;
+        remark: string;
+        tag: string;
+        vpcId: string;
+    }
+
+    export interface LookupVpnGatewaysVpnGatewayIpSet {
+        internetType: string;
+        ip: string;
+    }
+
+    export interface VpnConnectionIkeConfig {
+        authenticationAlgorithm?: string;
+        dhGroup?: string;
+        encryptionAlgorithm?: string;
+        exchangeMode?: string;
+        ikeVersion?: string;
+        localId: string;
+        preSharedKey: string;
+        remoteId: string;
+        saLifeTime?: number;
+    }
+
+    export interface VpnConnectionIpsecConfig {
+        authenticationAlgorithm?: string;
+        encryptionAlgorithm?: string;
+        localSubnetIds: string[];
+        pfsDhGroup?: string;
+        protocol?: string;
+        remoteSubnets: string[];
+        saLifeTime?: number;
+        saLifeTimeBytes: number;
+    }
+}
+
 export namespace udb {
     export interface LookupDbInstancesDbInstance {
         availabilityZone: string;
@@ -249,6 +338,23 @@ export namespace unet {
 }
 
 export namespace vpc {
+    export interface LookupNatGatewaysNatGateway {
+        createTime: string;
+        id: string;
+        ipSets: outputs.vpc.LookupNatGatewaysNatGatewayIpSet[];
+        name: string;
+        remark: string;
+        securityGroup: string;
+        subnetIds: string[];
+        tag: string;
+        vpcId: string;
+    }
+
+    export interface LookupNatGatewaysNatGatewayIpSet {
+        internetType: string;
+        ip: string;
+    }
+
     export interface LookupSubnetsSubnet {
         cidrBlock: string;
         createTime: string;

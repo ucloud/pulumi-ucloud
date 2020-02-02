@@ -33,11 +33,12 @@ export class Instance extends pulumi.CustomResource {
         return obj['__pulumiType'] === Instance.__pulumiType;
     }
 
+    public readonly allowStoppingForUpdate!: pulumi.Output<boolean | undefined>;
     public /*out*/ readonly autoRenew!: pulumi.Output<boolean>;
     public readonly availabilityZone!: pulumi.Output<string>;
     public readonly bootDiskSize!: pulumi.Output<number>;
     public readonly bootDiskType!: pulumi.Output<string>;
-    public readonly chargeType!: pulumi.Output<string | undefined>;
+    public readonly chargeType!: pulumi.Output<string>;
     public /*out*/ readonly cpu!: pulumi.Output<number>;
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     public readonly dataDiskSize!: pulumi.Output<number>;
@@ -51,7 +52,7 @@ export class Instance extends pulumi.CustomResource {
     public readonly isolationGroup!: pulumi.Output<string>;
     public /*out*/ readonly memory!: pulumi.Output<number>;
     public readonly name!: pulumi.Output<string>;
-    public /*out*/ readonly privateIp!: pulumi.Output<string>;
+    public readonly privateIp!: pulumi.Output<string>;
     public readonly remark!: pulumi.Output<string>;
     public readonly rootPassword!: pulumi.Output<string>;
     public readonly securityGroup!: pulumi.Output<string>;
@@ -72,6 +73,7 @@ export class Instance extends pulumi.CustomResource {
         let inputs: pulumi.Inputs = {};
         if (opts && opts.id) {
             const state = argsOrState as InstanceState | undefined;
+            inputs["allowStoppingForUpdate"] = state ? state.allowStoppingForUpdate : undefined;
             inputs["autoRenew"] = state ? state.autoRenew : undefined;
             inputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             inputs["bootDiskSize"] = state ? state.bootDiskSize : undefined;
@@ -109,6 +111,7 @@ export class Instance extends pulumi.CustomResource {
             if (!args || args.instanceType === undefined) {
                 throw new Error("Missing required property 'instanceType'");
             }
+            inputs["allowStoppingForUpdate"] = args ? args.allowStoppingForUpdate : undefined;
             inputs["availabilityZone"] = args ? args.availabilityZone : undefined;
             inputs["bootDiskSize"] = args ? args.bootDiskSize : undefined;
             inputs["bootDiskType"] = args ? args.bootDiskType : undefined;
@@ -120,6 +123,7 @@ export class Instance extends pulumi.CustomResource {
             inputs["instanceType"] = args ? args.instanceType : undefined;
             inputs["isolationGroup"] = args ? args.isolationGroup : undefined;
             inputs["name"] = args ? args.name : undefined;
+            inputs["privateIp"] = args ? args.privateIp : undefined;
             inputs["remark"] = args ? args.remark : undefined;
             inputs["rootPassword"] = args ? args.rootPassword : undefined;
             inputs["securityGroup"] = args ? args.securityGroup : undefined;
@@ -133,7 +137,6 @@ export class Instance extends pulumi.CustomResource {
             inputs["expireTime"] = undefined /*out*/;
             inputs["ipSets"] = undefined /*out*/;
             inputs["memory"] = undefined /*out*/;
-            inputs["privateIp"] = undefined /*out*/;
             inputs["status"] = undefined /*out*/;
         }
         if (!opts) {
@@ -151,6 +154,7 @@ export class Instance extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Instance resources.
  */
 export interface InstanceState {
+    readonly allowStoppingForUpdate?: pulumi.Input<boolean>;
     readonly autoRenew?: pulumi.Input<boolean>;
     readonly availabilityZone?: pulumi.Input<string>;
     readonly bootDiskSize?: pulumi.Input<number>;
@@ -183,6 +187,7 @@ export interface InstanceState {
  * The set of arguments for constructing a Instance resource.
  */
 export interface InstanceArgs {
+    readonly allowStoppingForUpdate?: pulumi.Input<boolean>;
     readonly availabilityZone: pulumi.Input<string>;
     readonly bootDiskSize?: pulumi.Input<number>;
     readonly bootDiskType?: pulumi.Input<string>;
@@ -194,6 +199,7 @@ export interface InstanceArgs {
     readonly instanceType: pulumi.Input<string>;
     readonly isolationGroup?: pulumi.Input<string>;
     readonly name?: pulumi.Input<string>;
+    readonly privateIp?: pulumi.Input<string>;
     readonly remark?: pulumi.Input<string>;
     readonly rootPassword?: pulumi.Input<string>;
     readonly securityGroup?: pulumi.Input<string>;

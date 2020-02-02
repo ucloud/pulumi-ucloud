@@ -18,9 +18,9 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/hashicorp/terraform/terraform"
-	"github.com/pulumi/pulumi-terraform/pkg/tfbridge"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/pulumi/pulumi-terraform-bridge/pkg/tfbridge"
 	"github.com/pulumi/pulumi/pkg/resource"
 	"github.com/pulumi/pulumi/pkg/tokens"
 	"github.com/terraform-providers/terraform-provider-ucloud/ucloud"
@@ -150,6 +150,11 @@ func Provider() tfbridge.ProviderInfo {
 	// Instantiate the Terraform provider
 	p := ucloud.Provider().(*schema.Provider)
 
+	ns := map[string]string{"ucloud": "ucloud"}
+	for _, n := range resModMaps {
+		ns[n] = n
+	}
+
 	// Create a Pulumi provider mapping
 	prov := tfbridge.ProviderInfo{
 		P:           p,
@@ -217,7 +222,7 @@ func Provider() tfbridge.ProviderInfo {
 			// See the documentation for tfbridge.OverlayInfo for how to lay out this
 			// section, or refer to the AWS provider. Delete this section if there are
 			// no overlay files.
-			//Overlay: &tfbridge.OverlayInfo{},
+			// Overlay: &tfbridge.OverlayInfo{},
 		},
 		Python: &tfbridge.PythonInfo{
 			// List any Python dependencies and their version ranges
@@ -226,12 +231,20 @@ func Provider() tfbridge.ProviderInfo {
 			},
 		},
 		Golang: &tfbridge.GolangInfo{},
+		CSharp: &tfbridge.CSharpInfo{
+			PackageReferences: map[string]string{
+				"Pulumi":                       "1.7.0-preview",
+				"System.Collections.Immutable": "1.6.0",
+			},
+			Namespaces: ns,
+		},
 	}
 
 	for name, _ := range p.ResourcesMap {
 		resStructName := ToStructName(name)
+		ns := resModMaps[name]
 		prov.Resources[name] = &tfbridge.ResourceInfo{
-			Tok: makeResource(resModMaps[name], resStructName),
+			Tok: makeResource(ns, resStructName),
 		}
 	}
 

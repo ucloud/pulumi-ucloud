@@ -5,6 +5,31 @@ import * as pulumi from "@pulumi/pulumi";
 import * as inputs from "../types/input";
 
 
+export namespace ipsecvpn {
+    export interface VpnConnectionIkeConfig {
+        authenticationAlgorithm?: pulumi.Input<string>;
+        dhGroup?: pulumi.Input<string>;
+        encryptionAlgorithm?: pulumi.Input<string>;
+        exchangeMode?: pulumi.Input<string>;
+        ikeVersion?: pulumi.Input<string>;
+        localId?: pulumi.Input<string>;
+        preSharedKey: pulumi.Input<string>;
+        remoteId?: pulumi.Input<string>;
+        saLifeTime?: pulumi.Input<number>;
+    }
+
+    export interface VpnConnectionIpsecConfig {
+        authenticationAlgorithm?: pulumi.Input<string>;
+        encryptionAlgorithm?: pulumi.Input<string>;
+        localSubnetIds: pulumi.Input<pulumi.Input<string>[]>;
+        pfsDhGroup?: pulumi.Input<string>;
+        protocol?: pulumi.Input<string>;
+        remoteSubnets: pulumi.Input<pulumi.Input<string>[]>;
+        saLifeTime?: pulumi.Input<number>;
+        saLifeTimeBytes?: pulumi.Input<number>;
+    }
+}
+
 export namespace udb {
 }
 

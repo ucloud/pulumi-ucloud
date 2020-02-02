@@ -1,0 +1,10 @@
+// Package ucloud exports types, functions, subpackages for provisioning ucloud resources.//
+// A Pulumi package for creating and managing ucloud cloud resources.
+//
+// > This provider is a derived work of the [Terraform Provider](https://github.com/terraform-providers/terraform-provider-ucloud)
+// > distributed under [MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/). If you encounter a bug or missing feature,
+// > first check the [`pulumi/pulumi-ucloud` repo](https://github.com/pulumi/pulumi-ucloud/issues); however, if that doesn't turn up anything,
+// > please consult the source [`terraform-providers/terraform-provider-ucloud` repo](https://github.com/terraform-providers/terraform-provider-ucloud/issues).
+//
+// nolint: lll
+package ucloud

@@ -57,7 +57,7 @@ class Eip(pulumi.CustomResource):
     It is a nested type which documented below.
     
       * `id` (`str`) - The ID of the resource with EIP attached.
-      * `type` (`str`) - The type of resource with EIP attached. Possible values are `instance` as instance, `vrouter` as visual router, `lb` as load balancer.
+      * `type` (`str`) - The type of resource with EIP attached. Possible values are `instance` as instance, `lb` as load balancer.
     """
     status: pulumi.Output[str]
     """
@@ -153,7 +153,7 @@ class Eip(pulumi.CustomResource):
         The **resource** object supports the following:
         
           * `id` (`pulumi.Input[str]`) - The ID of the resource with EIP attached.
-          * `type` (`pulumi.Input[str]`) - The type of resource with EIP attached. Possible values are `instance` as instance, `vrouter` as visual router, `lb` as load balancer.
+          * `type` (`pulumi.Input[str]`) - The type of resource with EIP attached. Possible values are `instance` as instance, `lb` as load balancer.
 
         > This content is derived from https://github.com/terraform-providers/terraform-provider-ucloud/blob/master/website/docs/r/eip.html.markdown.
         """

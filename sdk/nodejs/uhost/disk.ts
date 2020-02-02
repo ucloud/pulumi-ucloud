@@ -32,7 +32,7 @@ export class Disk extends pulumi.CustomResource {
     }
 
     public readonly availabilityZone!: pulumi.Output<string>;
-    public readonly chargeType!: pulumi.Output<string | undefined>;
+    public readonly chargeType!: pulumi.Output<string>;
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     public readonly diskSize!: pulumi.Output<number>;
     public readonly diskType!: pulumi.Output<string | undefined>;

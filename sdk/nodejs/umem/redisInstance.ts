@@ -34,7 +34,7 @@ export class RedisInstance extends pulumi.CustomResource {
     }
 
     public readonly availabilityZone!: pulumi.Output<string>;
-    public readonly chargeType!: pulumi.Output<string | undefined>;
+    public readonly chargeType!: pulumi.Output<string>;
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     public readonly duration!: pulumi.Output<number | undefined>;
     public readonly engineVersion!: pulumi.Output<string>;

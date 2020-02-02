@@ -57,11 +57,12 @@ class DbInstance(pulumi.CustomResource):
     """
     instance_storage: pulumi.Output[float]
     """
-    Specifies the allocated storage size in gigabytes (GB), range from 20 to 3000GB. The volume adjustment must be a multiple of 10 GB. The maximum disk volume for SSD type are：
-    - 500GB if the memory chosen is equal or less than 8GB;
-    - 1000GB if the memory chosen is from 12 to 24GB;
-    - 2000GB if the memory chosen is 32GB;
-    - 3000GB if the memory chosen is equal or more than 48GB.
+    Specifies the allocated storage size in gigabytes (GB), range from 20 to 4500GB. The volume adjustment must be a multiple of 10 GB. The maximum disk volume for SSD type are：
+    - 500GB if the memory chosen is equal or less than 6GB;
+    - 1000GB if the memory chosen is from 8 to 16GB;
+    - 2000GB if the memory chosen is 24GB or 32GB;
+    - 3500GB if the memory chosen is 48GB or 64GB;
+    - 4500GB if the memory chosen is equal or more than 96GB;
     """
     instance_type: pulumi.Output[str]
     modify_time: pulumi.Output[str]
@@ -116,11 +117,12 @@ class DbInstance(pulumi.CustomResource):
         :param pulumi.Input[str] engine: The type of database engine, possible values are: "mysql", "percona".
         :param pulumi.Input[str] engine_version: The database engine version, possible values are: "5.5", "5.6", "5.7".
                - 5.5/5.6/5.7 for mysql and percona engine.
-        :param pulumi.Input[float] instance_storage: Specifies the allocated storage size in gigabytes (GB), range from 20 to 3000GB. The volume adjustment must be a multiple of 10 GB. The maximum disk volume for SSD type are：
-               - 500GB if the memory chosen is equal or less than 8GB;
-               - 1000GB if the memory chosen is from 12 to 24GB;
-               - 2000GB if the memory chosen is 32GB;
-               - 3000GB if the memory chosen is equal or more than 48GB.
+        :param pulumi.Input[float] instance_storage: Specifies the allocated storage size in gigabytes (GB), range from 20 to 4500GB. The volume adjustment must be a multiple of 10 GB. The maximum disk volume for SSD type are：
+               - 500GB if the memory chosen is equal or less than 6GB;
+               - 1000GB if the memory chosen is from 8 to 16GB;
+               - 2000GB if the memory chosen is 24GB or 32GB;
+               - 3500GB if the memory chosen is 48GB or 64GB;
+               - 4500GB if the memory chosen is equal or more than 96GB;
         :param pulumi.Input[float] port: The port on which the database accepts connections, the default port is 3306 for mysql and percona.
         :param pulumi.Input[str] standby_zone: Availability zone where the standby database instance is located for the high availability database instance with multiple zone; The disaster recovery of data center can be activated by switching to the standby database instance for the high availability database instance.
         :param pulumi.Input[str] subnet_id: The ID of subnet.
@@ -206,11 +208,12 @@ class DbInstance(pulumi.CustomResource):
         :param pulumi.Input[str] engine_version: The database engine version, possible values are: "5.5", "5.6", "5.7".
                - 5.5/5.6/5.7 for mysql and percona engine.
         :param pulumi.Input[str] expire_time: The expiration time of database, formatted by RFC3339 time string.
-        :param pulumi.Input[float] instance_storage: Specifies the allocated storage size in gigabytes (GB), range from 20 to 3000GB. The volume adjustment must be a multiple of 10 GB. The maximum disk volume for SSD type are：
-               - 500GB if the memory chosen is equal or less than 8GB;
-               - 1000GB if the memory chosen is from 12 to 24GB;
-               - 2000GB if the memory chosen is 32GB;
-               - 3000GB if the memory chosen is equal or more than 48GB.
+        :param pulumi.Input[float] instance_storage: Specifies the allocated storage size in gigabytes (GB), range from 20 to 4500GB. The volume adjustment must be a multiple of 10 GB. The maximum disk volume for SSD type are：
+               - 500GB if the memory chosen is equal or less than 6GB;
+               - 1000GB if the memory chosen is from 8 to 16GB;
+               - 2000GB if the memory chosen is 24GB or 32GB;
+               - 3500GB if the memory chosen is 48GB or 64GB;
+               - 4500GB if the memory chosen is equal or more than 96GB;
         :param pulumi.Input[str] modify_time: The modification time of database, formatted by RFC3339 time string.
         :param pulumi.Input[float] port: The port on which the database accepts connections, the default port is 3306 for mysql and percona.
         :param pulumi.Input[str] private_ip: The private IP address assigned to the database instance.

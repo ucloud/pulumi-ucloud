@@ -4,3 +4,4 @@
 
 # Export this package's modules as members:
 from .db_instance import *
+from .lookup_db_instances import *

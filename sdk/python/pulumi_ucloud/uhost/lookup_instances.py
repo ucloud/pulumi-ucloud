@@ -75,7 +75,7 @@ def lookup_instances(availability_zone=None,ids=None,name_regex=None,output_file
     :param str availability_zone: Availability zone where instances are located. Such as: "cn-bj2-02". You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
     :param list ids: A list of instance IDs, all the instances belongs to the defined region will be retrieved if this argument is "".
     :param str name_regex: A regex string to filter resulting instances by name.
-    :param str tag: A tag assigned to instance, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+    :param str tag: A tag assigned to instance.
 
     > This content is derived from https://github.com/terraform-providers/terraform-provider-ucloud/blob/master/website/docs/d/instances.html.markdown.
     """

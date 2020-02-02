@@ -35,7 +35,7 @@ export class Eip extends pulumi.CustomResource {
 
     public readonly bandwidth!: pulumi.Output<number>;
     public readonly chargeMode!: pulumi.Output<string>;
-    public readonly chargeType!: pulumi.Output<string | undefined>;
+    public readonly chargeType!: pulumi.Output<string>;
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     public readonly duration!: pulumi.Output<number | undefined>;
     public /*out*/ readonly expireTime!: pulumi.Output<string>;

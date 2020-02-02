@@ -3,8 +3,12 @@
 # *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 # Export this package's modules as members:
+from .nat_gateway import *
+from .nat_gateway_rule import *
 from .subnet import *
+from .vip import *
 from .vpc import *
 from .vpc_peering_connection import *
+from .lookup_nat_gateways import *
 from .lookup_subnets import *
 from .lookup_vpcs import *

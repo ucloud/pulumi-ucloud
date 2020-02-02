@@ -10,6 +10,7 @@ from typing import Union
 from .. import utilities, tables
 
 class Instance(pulumi.CustomResource):
+    allow_stopping_for_update: pulumi.Output[bool]
     auto_renew: pulumi.Output[bool]
     """
     Whether to renew an instance automatically or not.
@@ -81,7 +82,7 @@ class Instance(pulumi.CustomResource):
     """
     memory: pulumi.Output[float]
     """
-    The size of memory, measured in MB (Megabyte).
+    The size of memory, measured in GB(Gigabyte).
     """
     name: pulumi.Output[str]
     private_ip: pulumi.Output[str]
@@ -113,11 +114,9 @@ class Instance(pulumi.CustomResource):
     """
     The ID of VPC linked to the instance. If not defined `vpc_id`, the instance will use the default VPC in the current region.
     """
-    def __init__(__self__, resource_name, opts=None, availability_zone=None, boot_disk_size=None, boot_disk_type=None, charge_type=None, data_disk_size=None, data_disk_type=None, duration=None, image_id=None, instance_type=None, isolation_group=None, name=None, remark=None, root_password=None, security_group=None, subnet_id=None, tag=None, vpc_id=None, __props__=None, __name__=None, __opts__=None):
+    def __init__(__self__, resource_name, opts=None, allow_stopping_for_update=None, availability_zone=None, boot_disk_size=None, boot_disk_type=None, charge_type=None, data_disk_size=None, data_disk_type=None, duration=None, image_id=None, instance_type=None, isolation_group=None, name=None, private_ip=None, remark=None, root_password=None, security_group=None, subnet_id=None, tag=None, vpc_id=None, __props__=None, __name__=None, __opts__=None):
         """
-        Provides an UHost Instance resource.
-        
-        > **Note** The instance will reboot automatically to make the change take effect when update `instance_type`, `root_password`, `boot_disk_size`, `data_disk_size`. In addition, once the instance complete creation, it takes around 10 minutes for boot disk initialization for the running instance, and the updates will only be made to some specific attributes (`root_password`, `boot_disk_size`) if required once the instance initialization completed.
+        Create a Instance resource with the given unique name, props, and options.
         
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -130,6 +129,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[float] duration: The duration that you will buy the instance (Default: `1`). The value is `0` when pay by month and the instance will be valid till the last day of that month. It is not required when `dynamic` (pay by hour).
         :param pulumi.Input[str] image_id: The ID for the image to use for the instance.
         :param pulumi.Input[str] isolation_group: The ID of the associated isolation group.
+        :param pulumi.Input[str] private_ip: The private IP address assigned to the instance.
         :param pulumi.Input[str] remark: The remarks of instance. (Default: `""`).
         :param pulumi.Input[str] security_group: The ID of the associated security group.
         :param pulumi.Input[str] subnet_id: The ID of subnet. If defined `vpc_id`, the `subnet_id` is Required. If not defined `vpc_id` and `subnet_id`, the instance will use the default subnet in the current region.
@@ -155,6 +155,7 @@ class Instance(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = dict()
 
+            __props__['allow_stopping_for_update'] = allow_stopping_for_update
             if availability_zone is None:
                 raise TypeError("Missing required property 'availability_zone'")
             __props__['availability_zone'] = availability_zone
@@ -172,6 +173,7 @@ class Instance(pulumi.CustomResource):
             __props__['instance_type'] = instance_type
             __props__['isolation_group'] = isolation_group
             __props__['name'] = name
+            __props__['private_ip'] = private_ip
             __props__['remark'] = remark
             __props__['root_password'] = root_password
             __props__['security_group'] = security_group
@@ -185,7 +187,6 @@ class Instance(pulumi.CustomResource):
             __props__['expire_time'] = None
             __props__['ip_sets'] = None
             __props__['memory'] = None
-            __props__['private_ip'] = None
             __props__['status'] = None
         super(Instance, __self__).__init__(
             'ucloud:uhost/instance:Instance',
@@ -194,7 +195,7 @@ class Instance(pulumi.CustomResource):
             opts)
 
     @staticmethod
-    def get(resource_name, id, opts=None, auto_renew=None, availability_zone=None, boot_disk_size=None, boot_disk_type=None, charge_type=None, cpu=None, create_time=None, data_disk_size=None, data_disk_type=None, disk_sets=None, duration=None, expire_time=None, image_id=None, instance_type=None, ip_sets=None, isolation_group=None, memory=None, name=None, private_ip=None, remark=None, root_password=None, security_group=None, status=None, subnet_id=None, tag=None, vpc_id=None):
+    def get(resource_name, id, opts=None, allow_stopping_for_update=None, auto_renew=None, availability_zone=None, boot_disk_size=None, boot_disk_type=None, charge_type=None, cpu=None, create_time=None, data_disk_size=None, data_disk_type=None, disk_sets=None, duration=None, expire_time=None, image_id=None, instance_type=None, ip_sets=None, isolation_group=None, memory=None, name=None, private_ip=None, remark=None, root_password=None, security_group=None, status=None, subnet_id=None, tag=None, vpc_id=None):
         """
         Get an existing Instance resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -217,7 +218,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] image_id: The ID for the image to use for the instance.
         :param pulumi.Input[list] ip_sets: It is a nested type which documented below.
         :param pulumi.Input[str] isolation_group: The ID of the associated isolation group.
-        :param pulumi.Input[float] memory: The size of memory, measured in MB (Megabyte).
+        :param pulumi.Input[float] memory: The size of memory, measured in GB(Gigabyte).
         :param pulumi.Input[str] private_ip: The private IP address assigned to the instance.
         :param pulumi.Input[str] remark: The remarks of instance. (Default: `""`).
         :param pulumi.Input[str] security_group: The ID of the associated security group.
@@ -243,6 +244,7 @@ class Instance(pulumi.CustomResource):
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = dict()
+        __props__["allow_stopping_for_update"] = allow_stopping_for_update
         __props__["auto_renew"] = auto_renew
         __props__["availability_zone"] = availability_zone
         __props__["boot_disk_size"] = boot_disk_size

@@ -8,6 +8,7 @@ export * from "./provider";
 
 // Export sub-modules:
 import * as config from "./config/index";
+import * as ipsecvpn from "./ipsecvpn/index";
 import * as types from "./types/index";
 import * as udb from "./udb/index";
 import * as udpn from "./udpn/index";
@@ -16,4 +17,4 @@ import * as ulb from "./ulb/index";
 import * as umem from "./umem/index";
 import * as unet from "./unet/index";
 import * as vpc from "./vpc/index";
-export {config, types, udb, udpn, uhost, ulb, umem, unet, vpc};
+export {config, ipsecvpn, types, udb, udpn, uhost, ulb, umem, unet, vpc};
