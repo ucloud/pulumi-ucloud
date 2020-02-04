@@ -169,7 +169,7 @@ func Provider() tfbridge.ProviderInfo {
 			// no additional points are required.
 			"region": {
 				Default: &tfbridge.DefaultInfo{
-					EnvVars: []string{"UCLOUD_REGION", "UCLOUD_DEFAULT_REGION"},
+					EnvVars: []string{"UCLOUD_REGION", "UCloud Region"},
 				},
 			},
 			"public_key": {
@@ -187,16 +187,14 @@ func Provider() tfbridge.ProviderInfo {
 					EnvVars: []string{"UCLOUD_PROJECT_ID", "UCloud Project Id"},
 				},
 			},
-			"base_url": {
-				// Type: makeType("base_url", "BaseUrl"),
-			},
-			"max_retries": {},
-			"insecure":    {},
 			"profile": {
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_PROFILE", "UCloud Profile Name"},
 				},
 			},
+			"base_url":    {},
+			"max_retries": {},
+			"insecure":    {},
 			"shared_credentials_file": {
 				Default: &tfbridge.DefaultInfo{
 					EnvVars: []string{"UCLOUD_SHARED_CREDENTIAL_FILE", "Path To The Shared Credentials File"},
