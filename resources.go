@@ -32,8 +32,9 @@ const (
 	mainPkg = "ucloud"
 	// modules:
 	mainMod     = "index" // the y module
-	RootRes     = ""
+	UAccountRes = "uaccount"
 	UHostRes    = "uhost"
+	UDiskRes    = "udisk"
 	UNetRes     = "unet"
 	ULBRes      = "ulb"
 	VpcRes      = "vpc"
@@ -41,21 +42,25 @@ const (
 	UMemRes     = "umem"
 	IpSecVPNRes = "ipsecvpn"
 	UDPNRes     = "udpn"
+	UFSRes      = "ufs"
+	US3Res      = "us3"
+	CubeRes     = "cube"
+	UK8SRes     = "uk8s"
 )
 
 var dsModMaps = map[string]string{
-	"ucloud_projects":              RootRes,
-	"ucloud_zones":                 RootRes,
+	"ucloud_projects":              UAccountRes,
+	"ucloud_zones":                 UAccountRes,
 	"ucloud_images":                UHostRes,
 	"ucloud_instances":             UHostRes,
-	"ucloud_disks":                 UHostRes,
 	"ucloud_eips":                  UNetRes,
 	"ucloud_security_groups":       UNetRes,
-	"ucloud_lb_ssls":               ULBRes,
 	"ucloud_lbs":                   ULBRes,
 	"ucloud_lb_listeners":          ULBRes,
 	"ucloud_lb_rules":              ULBRes,
 	"ucloud_lb_attachments":        ULBRes,
+	"ucloud_lb_ssls":               ULBRes,
+	"ucloud_disks":                 UDiskRes,
 	"ucloud_db_instances":          UDBRes,
 	"ucloud_subnets":               VpcRes,
 	"ucloud_vpcs":                  VpcRes,
@@ -63,35 +68,42 @@ var dsModMaps = map[string]string{
 	"ucloud_vpn_gateways":          IpSecVPNRes,
 	"ucloud_vpn_customer_gateways": IpSecVPNRes,
 	"ucloud_vpn_connections":       IpSecVPNRes,
+	"ucloud_ufs_volumes":           UFSRes,
+	"ucloud_us3_buckets":           US3Res,
 }
 
 var resModMaps = map[string]string{
 	"ucloud_instance":               UHostRes,
-	"ucloud_disk":                   UHostRes,
-	"ucloud_disk_attachment":        UHostRes,
-	"ucloud_isolation_group":        UHostRes,
-	"ucloud_security_group":         UNetRes,
 	"ucloud_eip":                    UNetRes,
 	"ucloud_eip_association":        UNetRes,
+	"ucloud_vpc":                    VpcRes,
+	"ucloud_subnet":                 VpcRes,
+	"ucloud_vpc_peering_connection": VpcRes,
+	"ucloud_udpn_connection":        UDPNRes,
 	"ucloud_lb":                     ULBRes,
 	"ucloud_lb_attachment":          ULBRes,
 	"ucloud_lb_listener":            ULBRes,
 	"ucloud_lb_rule":                ULBRes,
 	"ucloud_lb_ssl":                 ULBRes,
 	"ucloud_lb_ssl_attachment":      ULBRes,
-	"ucloud_vpc":                    VpcRes,
-	"ucloud_vpc_peering_connection": VpcRes,
-	"ucloud_subnet":                 VpcRes,
-	"ucloud_nat_gateway":            VpcRes,
-	"ucloud_nat_gateway_rule":       VpcRes,
-	"ucloud_vip":                    VpcRes,
+	"ucloud_disk":                   UDiskRes,
+	"ucloud_disk_attachment":        UDiskRes,
+	"ucloud_security_group":         UNetRes,
+	"ucloud_isolation_group":        UHostRes,
 	"ucloud_db_instance":            UDBRes,
 	"ucloud_redis_instance":         UMemRes,
 	"ucloud_memcache_instance":      UMemRes,
+	"ucloud_nat_gateway":            VpcRes,
+	"ucloud_nat_gateway_rule":       VpcRes,
+	"ucloud_vip":                    VpcRes,
 	"ucloud_vpn_gateway":            IpSecVPNRes,
 	"ucloud_vpn_customer_gateway":   IpSecVPNRes,
 	"ucloud_vpn_connection":         IpSecVPNRes,
-	"ucloud_udpn_connection":        UDPNRes,
+	"ucloud_ufs_volume":             UFSRes,
+	"ucloud_us3_bucket":             US3Res,
+	"ucloud_cube_pod":               CubeRes,
+	"ucloud_uk8s_cluster":           UK8SRes,
+	"ucloud_uk8s_node":              UK8SRes,
 }
 
 // makeMember manufactures a type token for the package and the given module and type.
