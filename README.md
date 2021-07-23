@@ -1,5 +1,7 @@
 # Pulumi UCloud Provider
 
+[WIP] Work in progress, DON'T USE IT IN PRODUCTION!
+
 This repository is forked from [pulumi-tf-provider-boilerplate](https://github.com/pulumi/pulumi-tf-provider-boilerplate) 
 and modified to create Pulumi UCloud Provider. UCloud is a leading public cloud mainly based in China.
 
