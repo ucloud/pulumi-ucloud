@@ -12,15 +12,13 @@ Modify this README to describe:
 
 ## Creating a Pulumi Terraform Bridge Provider
 
-*Note: Go 1.12 is needed to build Pulumi providers using Go Modules. Currently, we recommend pinning the version in `.travis.yml` to `1.12.1` to work around an issue with running later versions on Travis CI.*
-
 First, clone this repo with the name of the desired provider in place of `ucloud`:
 
 ```
-git clone https://github.com/pulumi/pulumi-tf-provider-boilerplate pulumi-xyz
+git clone https://github.com/pulumi/pulumi-tf-provider-boilerplate pulumi-ucloud
 ```
 
-Second, replace references to `xyz` with the name of your provider:
+Second, replace references to `ucloud` with the name of your provider:
 
 ```
 make prepare NAME=foo REPOSITORY=github.com/pulumi/pulumi-foo
@@ -34,22 +32,17 @@ Next, list the configuration points for the provider in the area of the README.
 ### Add dependencies
 
 In order to properly build the sdks, the following tools are expected:
-- tf2pulumi (See the project's README for installation instructions: https://github.com/pulumi/tf2pulumi)
-- pandoc (`brew install pandoc`)
+- `pulumictl` (See the project's README for installation instructions: https://github.com/pulumi/pulumictl)
 
 In the root of the repository, run:
 
-- `go get github.com/pulumi/scripts/gomod-doccopy` (Note: do not set `GO111MODULE=on` here)
-- `GO111MODULE=on go get github.com/pulumi/pulumi-terraform@master`
-- `GO111MODULE=on go get github.com/terraform-providers/terraform-provider-xyz` (where `xyz` is the name of the provider)
-- `GO111MODULE=on go mod vendor`
-- `make ensure`
+- `(cd provider && go get github.com/terraform-providers/terraform-provider-foo)`  (where `foo` is the name of the provider - note the parenthesis to run this in a subshell)
+- `(cd provider && go mod download)`
 
 ### Build the provider:
 
-- Edit `resources.go` to map each resource, and specify provider information
-- Enumerate any examples in `examples/examples_test.go`
-- `make`
+- Edit `provider/resources.go` to map each resource, and specify provider information
+- `make build_sdks`
 
 ## Installing
 
@@ -75,18 +68,18 @@ To use from Python, install using `pip`:
 
 To use from Go, use `go get` to grab the latest version of the library
 
-    $ go get github.com/pulumi/pulumi-xyz/sdk/go/...
+    $ go get github.com/pulumi/pulumi-ucloud/sdk/go/...
 
 ## Configuration
 
-The following configuration points are available for the `xyz` provider:
+The following configuration points are available for the `ucloud` provider:
 
-- `xyz:apiKey` (environment: `XYZ_API_KEY`) - the API key for `xyz`
-- `xyz:region` (environment: `XYZ_REGION`) - the region in which to deploy resources
+- `ucloud:apiKey` (environment: `XYZ_API_KEY`) - the API key for `ucloud`
+- `ucloud:region` (environment: `XYZ_REGION`) - the region in which to deploy resources
 
 ## Reference
 
 For detailed reference documentation, please visit [the API docs][1].
 
 
-[1]: https://pulumi.io/reference/pkg/nodejs/pulumi/x/
+[1]: https://www.pulumi.com/docs/reference/pkg/x/

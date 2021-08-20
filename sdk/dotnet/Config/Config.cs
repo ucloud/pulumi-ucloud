@@ -3,12 +3,11 @@
 
 using System.Collections.Immutable;
 
-namespace Pulumi.ucloud
+namespace Pulumi.Ucloud
 {
     public static class Config
     {
         private static readonly Pulumi.Config __config = new Pulumi.Config("ucloud");
-
         /// <summary>
         /// ...
         /// </summary>
@@ -27,35 +26,32 @@ namespace Pulumi.ucloud
         /// <summary>
         /// ...
         /// </summary>
-        public static string? PrivateKey { get; set; } = __config.Get("privateKey") ?? Utilities.GetEnv("UCLOUD_PRIVATE_KEY", "UCloud Private Key");
+        public static string? PrivateKey { get; set; } = __config.Get("privateKey") ?? Utilities.GetEnv("UCLOUD_PRIVATE_KEY");
 
         /// <summary>
         /// ...
         /// </summary>
-        public static string? Profile { get; set; } = __config.Get("profile") ?? Utilities.GetEnv("UCLOUD_PROFILE", "UCloud Profile Name");
+        public static string? Profile { get; set; } = __config.Get("profile") ?? Utilities.GetEnv("UCLOUD_PROFILE");
 
         /// <summary>
         /// ...
         /// </summary>
-        public static string? ProjectId { get; set; } = __config.Get("projectId") ?? Utilities.GetEnv("UCLOUD_PROJECT_ID", "UCloud Project Id");
+        public static string? ProjectId { get; set; } = __config.Get("projectId") ?? Utilities.GetEnv("UCLOUD_PROJECT_ID");
 
         /// <summary>
         /// ...
         /// </summary>
-        public static string? PublicKey { get; set; } = __config.Get("publicKey") ?? Utilities.GetEnv("UCLOUD_PUBLIC_KEY", "UCloud Public Key");
+        public static string? PublicKey { get; set; } = __config.Get("publicKey") ?? Utilities.GetEnv("UCLOUD_PUBLIC_KEY");
 
         /// <summary>
         /// ...
         /// </summary>
-        public static string? Region { get; set; } = __config.Get("region") ?? Utilities.GetEnv("UCLOUD_REGION", "UCLOUD_DEFAULT_REGION");
+        public static string? Region { get; set; } = __config.Get("region") ?? Utilities.GetEnv("UCLOUD_REGION");
 
         /// <summary>
         /// ...
         /// </summary>
-        public static string? SharedCredentialsFile { get; set; } = __config.Get("sharedCredentialsFile") ?? Utilities.GetEnv("UCLOUD_SHARED_CREDENTIAL_FILE", "Path To The Shared Credentials File");
+        public static string? SharedCredentialsFile { get; set; } = __config.Get("sharedCredentialsFile") ?? Utilities.GetEnv("UCLOUD_SHARED_CREDENTIAL_FILE");
 
-    }
-    namespace ConfigTypes
-    {
     }
 }

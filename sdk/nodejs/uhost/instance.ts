@@ -2,10 +2,18 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "../types/input";
-import * as outputs from "../types/output";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
+/**
+ * ## Import
+ *
+ * Instance can be imported using the `id`, e.g.
+ *
+ * ```sh
+ *  $ pulumi import ucloud:uhost/instance:Instance example uhost-abcdefg
+ * ```
+ */
 export class Instance extends pulumi.CustomResource {
     /**
      * Get an existing Instance resource's state with the given name, ID, and optional extra
@@ -14,6 +22,7 @@ export class Instance extends pulumi.CustomResource {
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
     public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: InstanceState, opts?: pulumi.CustomResourceOptions): Instance {
         return new Instance(name, <any>state, { ...opts, id: id });
@@ -34,31 +43,127 @@ export class Instance extends pulumi.CustomResource {
     }
 
     public readonly allowStoppingForUpdate!: pulumi.Output<boolean | undefined>;
+    /**
+     * Whether to renew an instance automatically or not.
+     */
     public /*out*/ readonly autoRenew!: pulumi.Output<boolean>;
+    /**
+     * Availability zone where instance is located. such as: `cn-bj2-02`. You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+     */
     public readonly availabilityZone!: pulumi.Output<string>;
+    /**
+     * The size of the boot disk, measured in GB (GigaByte). Range: 20-500. The value set of disk size must be larger or equal to `20`(default: `20`) for Linux and `40` (default: `40`) for Windows. The responsive time is a bit longer if the value set is larger than default for local boot disk, and further settings may be required on host instance if the value set is larger than default for cloud boot disk. The disk volume adjustment must be a multiple of 10 GB. In addition, any reduction of boot disk size is not supported.
+     */
     public readonly bootDiskSize!: pulumi.Output<number>;
+    /**
+     * The type of boot disk. Possible values are: `localNormal` and `localSsd` for local boot disk, `cloudSsd` for cloud SSD boot disk. (Default: `localNormal`). The `localSsd` and `cloudSsd` are not fully support by all regions as boot disk type, please proceed to UCloud console for more details.
+     */
     public readonly bootDiskType!: pulumi.Output<string>;
+    /**
+     * The charge type of instance, possible values are: `year`, `month` and `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
     public readonly chargeType!: pulumi.Output<string>;
+    /**
+     * The number of cores of virtual CPU, measured in core.
+     */
     public /*out*/ readonly cpu!: pulumi.Output<number>;
+    public /*out*/ readonly cpuPlatform!: pulumi.Output<string>;
+    /**
+     * The time of creation for instance, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
+    /**
+     * The size of local data disk, measured in GB (GigaByte), 20-2000 for local sata disk and 20-1000 for local ssd disk (all the GPU type instances are included). The volume adjustment must be a multiple of 10 GB. In addition, any reduction of data disk size is not supported.
+     */
     public readonly dataDiskSize!: pulumi.Output<number>;
+    /**
+     * The type of local data disk. Possible values are: `localNormal` and `localSsd` for local data disk. (Default: `localNormal`). The `localSsd` is not fully support by all regions as data disk type, please proceed to UCloud console for more details. In addition, the `dataDiskType` must be same as `bootDiskType` if specified.
+     */
     public readonly dataDiskType!: pulumi.Output<string>;
+    /**
+     * Additional cloud data disks to attach to the instance. `dataDisks` configurations only apply on resource creation. The count of `dataDisks` can only be one. See dataDisks below for details on attributes. When set `dataDisks`, the argument `deleteDisksWithInstance` must bet set.
+     */
+    public readonly dataDisks!: pulumi.Output<outputs.uhost.InstanceDataDisks | undefined>;
+    /**
+     * Whether the cloud data disks attached instance should be destroyed on instance termination.
+     */
+    public readonly deleteDisksWithInstance!: pulumi.Output<boolean | undefined>;
+    /**
+     * It is a nested type which documented below.
+     */
     public /*out*/ readonly diskSets!: pulumi.Output<outputs.uhost.InstanceDiskSet[]>;
+    /**
+     * The duration that you will buy the instance (Default: `1`). The value is `0` when pay by month and the instance will be valid till the last day of that month. It is not required when `dynamic` (pay by hour).
+     */
     public readonly duration!: pulumi.Output<number | undefined>;
+    /**
+     * The expiration time for instance, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly expireTime!: pulumi.Output<string>;
+    /**
+     * The ID for the image to use for the instance.
+     */
     public readonly imageId!: pulumi.Output<string>;
     public readonly instanceType!: pulumi.Output<string>;
+    /**
+     * It is a nested type which documented below.
+     */
     public /*out*/ readonly ipSets!: pulumi.Output<outputs.uhost.InstanceIpSet[]>;
+    /**
+     * The ID of the associated isolation group.
+     */
     public readonly isolationGroup!: pulumi.Output<string>;
+    /**
+     * The size of memory, measured in GB(Gigabyte).
+     */
     public /*out*/ readonly memory!: pulumi.Output<number>;
+    /**
+     * Specifies a minimum CPU platform for the the VM instance. (Default: `Intel/Auto`). You may refer to [minCpuPlatform](https://docs.ucloud.cn/uhost/introduction/uhost/type_new)
+     * - The Intel CPU platform:
+     * - `Intel/Auto` as the Intel CPU platform version will be selected randomly by system;
+     * - `Intel/IvyBridge` as Intel V2, the version of Intel CPU platform selected by system will be `Intel/IvyBridge` and above;
+     * - `Intel/Haswell` as Intel V3,  the version of Intel CPU platform selected by system will be `Intel/Haswell` and above;
+     * - `Intel/Broadwell` as Intel V4, the version of Intel CPU platform selected by system will be `Intel/Broadwell` and above;
+     * - `Intel/Skylake` as Intel V5, the version of Intel CPU platform selected by system will be `Intel/Skylake` and above;
+     * - `Intel/Cascadelake` as Intel V6, the version of Intel CPU platform selected by system will be `Intel/Cascadelake`;
+     * - The AMD CPU platform:
+     * - `Amd/Auto` as the Amd CPU platform version will be selected randomly by system;
+     * - `Amd/Epyc2` as the version of Amd CPU platform selected by system will be `Amd/Epyc2` and above;
+     */
+    public readonly minCpuPlatform!: pulumi.Output<string | undefined>;
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The private IP address assigned to the instance.
+     */
     public readonly privateIp!: pulumi.Output<string>;
+    /**
+     * The remarks of instance. (Default: `""`).
+     */
     public readonly remark!: pulumi.Output<string>;
     public readonly rootPassword!: pulumi.Output<string>;
+    /**
+     * The ID of the associated security group.
+     */
     public readonly securityGroup!: pulumi.Output<string>;
+    /**
+     * Instance current status. Possible values are `Initializing`, `Starting`, `Running`, `Stopping`, `Stopped`, `Install Fail`, `ResizeFail` and `Rebooting`.
+     */
     public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
+     * The ID of subnet. If defined `vpcId`, the `subnetId` is Required. If not defined `vpcId` and `subnetId`, the instance will use the default subnet in the current region.
+     */
     public readonly subnetId!: pulumi.Output<string>;
+    /**
+     * A tag assigned to instance, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
     public readonly tag!: pulumi.Output<string | undefined>;
+    /**
+     * The user data to customize the startup behaviors when launching the instance. You may refer to [userDataDocument](https://docs.ucloud.cn/uhost/guide/metadata/userdata)
+     */
+    public readonly userData!: pulumi.Output<string | undefined>;
+    /**
+     * The ID of VPC linked to the instance. If not defined `vpcId`, the instance will use the default VPC in the current region.
+     */
     public readonly vpcId!: pulumi.Output<string>;
 
     /**
@@ -71,7 +176,8 @@ export class Instance extends pulumi.CustomResource {
     constructor(name: string, args: InstanceArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: InstanceArgs | InstanceState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
+        opts = opts || {};
+        if (opts.id) {
             const state = argsOrState as InstanceState | undefined;
             inputs["allowStoppingForUpdate"] = state ? state.allowStoppingForUpdate : undefined;
             inputs["autoRenew"] = state ? state.autoRenew : undefined;
@@ -80,9 +186,12 @@ export class Instance extends pulumi.CustomResource {
             inputs["bootDiskType"] = state ? state.bootDiskType : undefined;
             inputs["chargeType"] = state ? state.chargeType : undefined;
             inputs["cpu"] = state ? state.cpu : undefined;
+            inputs["cpuPlatform"] = state ? state.cpuPlatform : undefined;
             inputs["createTime"] = state ? state.createTime : undefined;
             inputs["dataDiskSize"] = state ? state.dataDiskSize : undefined;
             inputs["dataDiskType"] = state ? state.dataDiskType : undefined;
+            inputs["dataDisks"] = state ? state.dataDisks : undefined;
+            inputs["deleteDisksWithInstance"] = state ? state.deleteDisksWithInstance : undefined;
             inputs["diskSets"] = state ? state.diskSets : undefined;
             inputs["duration"] = state ? state.duration : undefined;
             inputs["expireTime"] = state ? state.expireTime : undefined;
@@ -91,6 +200,7 @@ export class Instance extends pulumi.CustomResource {
             inputs["ipSets"] = state ? state.ipSets : undefined;
             inputs["isolationGroup"] = state ? state.isolationGroup : undefined;
             inputs["memory"] = state ? state.memory : undefined;
+            inputs["minCpuPlatform"] = state ? state.minCpuPlatform : undefined;
             inputs["name"] = state ? state.name : undefined;
             inputs["privateIp"] = state ? state.privateIp : undefined;
             inputs["remark"] = state ? state.remark : undefined;
@@ -99,16 +209,17 @@ export class Instance extends pulumi.CustomResource {
             inputs["status"] = state ? state.status : undefined;
             inputs["subnetId"] = state ? state.subnetId : undefined;
             inputs["tag"] = state ? state.tag : undefined;
+            inputs["userData"] = state ? state.userData : undefined;
             inputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as InstanceArgs | undefined;
-            if (!args || args.availabilityZone === undefined) {
+            if ((!args || args.availabilityZone === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'availabilityZone'");
             }
-            if (!args || args.imageId === undefined) {
+            if ((!args || args.imageId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'imageId'");
             }
-            if (!args || args.instanceType === undefined) {
+            if ((!args || args.instanceType === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'instanceType'");
             }
             inputs["allowStoppingForUpdate"] = args ? args.allowStoppingForUpdate : undefined;
@@ -118,10 +229,13 @@ export class Instance extends pulumi.CustomResource {
             inputs["chargeType"] = args ? args.chargeType : undefined;
             inputs["dataDiskSize"] = args ? args.dataDiskSize : undefined;
             inputs["dataDiskType"] = args ? args.dataDiskType : undefined;
+            inputs["dataDisks"] = args ? args.dataDisks : undefined;
+            inputs["deleteDisksWithInstance"] = args ? args.deleteDisksWithInstance : undefined;
             inputs["duration"] = args ? args.duration : undefined;
             inputs["imageId"] = args ? args.imageId : undefined;
             inputs["instanceType"] = args ? args.instanceType : undefined;
             inputs["isolationGroup"] = args ? args.isolationGroup : undefined;
+            inputs["minCpuPlatform"] = args ? args.minCpuPlatform : undefined;
             inputs["name"] = args ? args.name : undefined;
             inputs["privateIp"] = args ? args.privateIp : undefined;
             inputs["remark"] = args ? args.remark : undefined;
@@ -129,9 +243,11 @@ export class Instance extends pulumi.CustomResource {
             inputs["securityGroup"] = args ? args.securityGroup : undefined;
             inputs["subnetId"] = args ? args.subnetId : undefined;
             inputs["tag"] = args ? args.tag : undefined;
+            inputs["userData"] = args ? args.userData : undefined;
             inputs["vpcId"] = args ? args.vpcId : undefined;
             inputs["autoRenew"] = undefined /*out*/;
             inputs["cpu"] = undefined /*out*/;
+            inputs["cpuPlatform"] = undefined /*out*/;
             inputs["createTime"] = undefined /*out*/;
             inputs["diskSets"] = undefined /*out*/;
             inputs["expireTime"] = undefined /*out*/;
@@ -139,12 +255,8 @@ export class Instance extends pulumi.CustomResource {
             inputs["memory"] = undefined /*out*/;
             inputs["status"] = undefined /*out*/;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
         super(Instance.__pulumiType, name, inputs, opts);
     }
@@ -154,56 +266,223 @@ export class Instance extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Instance resources.
  */
 export interface InstanceState {
-    readonly allowStoppingForUpdate?: pulumi.Input<boolean>;
-    readonly autoRenew?: pulumi.Input<boolean>;
-    readonly availabilityZone?: pulumi.Input<string>;
-    readonly bootDiskSize?: pulumi.Input<number>;
-    readonly bootDiskType?: pulumi.Input<string>;
-    readonly chargeType?: pulumi.Input<string>;
-    readonly cpu?: pulumi.Input<number>;
-    readonly createTime?: pulumi.Input<string>;
-    readonly dataDiskSize?: pulumi.Input<number>;
-    readonly dataDiskType?: pulumi.Input<string>;
-    readonly diskSets?: pulumi.Input<pulumi.Input<inputs.uhost.InstanceDiskSet>[]>;
-    readonly duration?: pulumi.Input<number>;
-    readonly expireTime?: pulumi.Input<string>;
-    readonly imageId?: pulumi.Input<string>;
-    readonly instanceType?: pulumi.Input<string>;
-    readonly ipSets?: pulumi.Input<pulumi.Input<inputs.uhost.InstanceIpSet>[]>;
-    readonly isolationGroup?: pulumi.Input<string>;
-    readonly memory?: pulumi.Input<number>;
-    readonly name?: pulumi.Input<string>;
-    readonly privateIp?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly rootPassword?: pulumi.Input<string>;
-    readonly securityGroup?: pulumi.Input<string>;
-    readonly status?: pulumi.Input<string>;
-    readonly subnetId?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId?: pulumi.Input<string>;
+    allowStoppingForUpdate?: pulumi.Input<boolean>;
+    /**
+     * Whether to renew an instance automatically or not.
+     */
+    autoRenew?: pulumi.Input<boolean>;
+    /**
+     * Availability zone where instance is located. such as: `cn-bj2-02`. You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+     */
+    availabilityZone?: pulumi.Input<string>;
+    /**
+     * The size of the boot disk, measured in GB (GigaByte). Range: 20-500. The value set of disk size must be larger or equal to `20`(default: `20`) for Linux and `40` (default: `40`) for Windows. The responsive time is a bit longer if the value set is larger than default for local boot disk, and further settings may be required on host instance if the value set is larger than default for cloud boot disk. The disk volume adjustment must be a multiple of 10 GB. In addition, any reduction of boot disk size is not supported.
+     */
+    bootDiskSize?: pulumi.Input<number>;
+    /**
+     * The type of boot disk. Possible values are: `localNormal` and `localSsd` for local boot disk, `cloudSsd` for cloud SSD boot disk. (Default: `localNormal`). The `localSsd` and `cloudSsd` are not fully support by all regions as boot disk type, please proceed to UCloud console for more details.
+     */
+    bootDiskType?: pulumi.Input<string>;
+    /**
+     * The charge type of instance, possible values are: `year`, `month` and `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
+    chargeType?: pulumi.Input<string>;
+    /**
+     * The number of cores of virtual CPU, measured in core.
+     */
+    cpu?: pulumi.Input<number>;
+    cpuPlatform?: pulumi.Input<string>;
+    /**
+     * The time of creation for instance, formatted in RFC3339 time string.
+     */
+    createTime?: pulumi.Input<string>;
+    /**
+     * The size of local data disk, measured in GB (GigaByte), 20-2000 for local sata disk and 20-1000 for local ssd disk (all the GPU type instances are included). The volume adjustment must be a multiple of 10 GB. In addition, any reduction of data disk size is not supported.
+     */
+    dataDiskSize?: pulumi.Input<number>;
+    /**
+     * The type of local data disk. Possible values are: `localNormal` and `localSsd` for local data disk. (Default: `localNormal`). The `localSsd` is not fully support by all regions as data disk type, please proceed to UCloud console for more details. In addition, the `dataDiskType` must be same as `bootDiskType` if specified.
+     */
+    dataDiskType?: pulumi.Input<string>;
+    /**
+     * Additional cloud data disks to attach to the instance. `dataDisks` configurations only apply on resource creation. The count of `dataDisks` can only be one. See dataDisks below for details on attributes. When set `dataDisks`, the argument `deleteDisksWithInstance` must bet set.
+     */
+    dataDisks?: pulumi.Input<inputs.uhost.InstanceDataDisks>;
+    /**
+     * Whether the cloud data disks attached instance should be destroyed on instance termination.
+     */
+    deleteDisksWithInstance?: pulumi.Input<boolean>;
+    /**
+     * It is a nested type which documented below.
+     */
+    diskSets?: pulumi.Input<pulumi.Input<inputs.uhost.InstanceDiskSet>[]>;
+    /**
+     * The duration that you will buy the instance (Default: `1`). The value is `0` when pay by month and the instance will be valid till the last day of that month. It is not required when `dynamic` (pay by hour).
+     */
+    duration?: pulumi.Input<number>;
+    /**
+     * The expiration time for instance, formatted in RFC3339 time string.
+     */
+    expireTime?: pulumi.Input<string>;
+    /**
+     * The ID for the image to use for the instance.
+     */
+    imageId?: pulumi.Input<string>;
+    instanceType?: pulumi.Input<string>;
+    /**
+     * It is a nested type which documented below.
+     */
+    ipSets?: pulumi.Input<pulumi.Input<inputs.uhost.InstanceIpSet>[]>;
+    /**
+     * The ID of the associated isolation group.
+     */
+    isolationGroup?: pulumi.Input<string>;
+    /**
+     * The size of memory, measured in GB(Gigabyte).
+     */
+    memory?: pulumi.Input<number>;
+    /**
+     * Specifies a minimum CPU platform for the the VM instance. (Default: `Intel/Auto`). You may refer to [minCpuPlatform](https://docs.ucloud.cn/uhost/introduction/uhost/type_new)
+     * - The Intel CPU platform:
+     * - `Intel/Auto` as the Intel CPU platform version will be selected randomly by system;
+     * - `Intel/IvyBridge` as Intel V2, the version of Intel CPU platform selected by system will be `Intel/IvyBridge` and above;
+     * - `Intel/Haswell` as Intel V3,  the version of Intel CPU platform selected by system will be `Intel/Haswell` and above;
+     * - `Intel/Broadwell` as Intel V4, the version of Intel CPU platform selected by system will be `Intel/Broadwell` and above;
+     * - `Intel/Skylake` as Intel V5, the version of Intel CPU platform selected by system will be `Intel/Skylake` and above;
+     * - `Intel/Cascadelake` as Intel V6, the version of Intel CPU platform selected by system will be `Intel/Cascadelake`;
+     * - The AMD CPU platform:
+     * - `Amd/Auto` as the Amd CPU platform version will be selected randomly by system;
+     * - `Amd/Epyc2` as the version of Amd CPU platform selected by system will be `Amd/Epyc2` and above;
+     */
+    minCpuPlatform?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The private IP address assigned to the instance.
+     */
+    privateIp?: pulumi.Input<string>;
+    /**
+     * The remarks of instance. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    rootPassword?: pulumi.Input<string>;
+    /**
+     * The ID of the associated security group.
+     */
+    securityGroup?: pulumi.Input<string>;
+    /**
+     * Instance current status. Possible values are `Initializing`, `Starting`, `Running`, `Stopping`, `Stopped`, `Install Fail`, `ResizeFail` and `Rebooting`.
+     */
+    status?: pulumi.Input<string>;
+    /**
+     * The ID of subnet. If defined `vpcId`, the `subnetId` is Required. If not defined `vpcId` and `subnetId`, the instance will use the default subnet in the current region.
+     */
+    subnetId?: pulumi.Input<string>;
+    /**
+     * A tag assigned to instance, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The user data to customize the startup behaviors when launching the instance. You may refer to [userDataDocument](https://docs.ucloud.cn/uhost/guide/metadata/userdata)
+     */
+    userData?: pulumi.Input<string>;
+    /**
+     * The ID of VPC linked to the instance. If not defined `vpcId`, the instance will use the default VPC in the current region.
+     */
+    vpcId?: pulumi.Input<string>;
 }
 
 /**
  * The set of arguments for constructing a Instance resource.
  */
 export interface InstanceArgs {
-    readonly allowStoppingForUpdate?: pulumi.Input<boolean>;
-    readonly availabilityZone: pulumi.Input<string>;
-    readonly bootDiskSize?: pulumi.Input<number>;
-    readonly bootDiskType?: pulumi.Input<string>;
-    readonly chargeType?: pulumi.Input<string>;
-    readonly dataDiskSize?: pulumi.Input<number>;
-    readonly dataDiskType?: pulumi.Input<string>;
-    readonly duration?: pulumi.Input<number>;
-    readonly imageId: pulumi.Input<string>;
-    readonly instanceType: pulumi.Input<string>;
-    readonly isolationGroup?: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly privateIp?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly rootPassword?: pulumi.Input<string>;
-    readonly securityGroup?: pulumi.Input<string>;
-    readonly subnetId?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId?: pulumi.Input<string>;
+    allowStoppingForUpdate?: pulumi.Input<boolean>;
+    /**
+     * Availability zone where instance is located. such as: `cn-bj2-02`. You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+     */
+    availabilityZone: pulumi.Input<string>;
+    /**
+     * The size of the boot disk, measured in GB (GigaByte). Range: 20-500. The value set of disk size must be larger or equal to `20`(default: `20`) for Linux and `40` (default: `40`) for Windows. The responsive time is a bit longer if the value set is larger than default for local boot disk, and further settings may be required on host instance if the value set is larger than default for cloud boot disk. The disk volume adjustment must be a multiple of 10 GB. In addition, any reduction of boot disk size is not supported.
+     */
+    bootDiskSize?: pulumi.Input<number>;
+    /**
+     * The type of boot disk. Possible values are: `localNormal` and `localSsd` for local boot disk, `cloudSsd` for cloud SSD boot disk. (Default: `localNormal`). The `localSsd` and `cloudSsd` are not fully support by all regions as boot disk type, please proceed to UCloud console for more details.
+     */
+    bootDiskType?: pulumi.Input<string>;
+    /**
+     * The charge type of instance, possible values are: `year`, `month` and `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
+    chargeType?: pulumi.Input<string>;
+    /**
+     * The size of local data disk, measured in GB (GigaByte), 20-2000 for local sata disk and 20-1000 for local ssd disk (all the GPU type instances are included). The volume adjustment must be a multiple of 10 GB. In addition, any reduction of data disk size is not supported.
+     */
+    dataDiskSize?: pulumi.Input<number>;
+    /**
+     * The type of local data disk. Possible values are: `localNormal` and `localSsd` for local data disk. (Default: `localNormal`). The `localSsd` is not fully support by all regions as data disk type, please proceed to UCloud console for more details. In addition, the `dataDiskType` must be same as `bootDiskType` if specified.
+     */
+    dataDiskType?: pulumi.Input<string>;
+    /**
+     * Additional cloud data disks to attach to the instance. `dataDisks` configurations only apply on resource creation. The count of `dataDisks` can only be one. See dataDisks below for details on attributes. When set `dataDisks`, the argument `deleteDisksWithInstance` must bet set.
+     */
+    dataDisks?: pulumi.Input<inputs.uhost.InstanceDataDisks>;
+    /**
+     * Whether the cloud data disks attached instance should be destroyed on instance termination.
+     */
+    deleteDisksWithInstance?: pulumi.Input<boolean>;
+    /**
+     * The duration that you will buy the instance (Default: `1`). The value is `0` when pay by month and the instance will be valid till the last day of that month. It is not required when `dynamic` (pay by hour).
+     */
+    duration?: pulumi.Input<number>;
+    /**
+     * The ID for the image to use for the instance.
+     */
+    imageId: pulumi.Input<string>;
+    instanceType: pulumi.Input<string>;
+    /**
+     * The ID of the associated isolation group.
+     */
+    isolationGroup?: pulumi.Input<string>;
+    /**
+     * Specifies a minimum CPU platform for the the VM instance. (Default: `Intel/Auto`). You may refer to [minCpuPlatform](https://docs.ucloud.cn/uhost/introduction/uhost/type_new)
+     * - The Intel CPU platform:
+     * - `Intel/Auto` as the Intel CPU platform version will be selected randomly by system;
+     * - `Intel/IvyBridge` as Intel V2, the version of Intel CPU platform selected by system will be `Intel/IvyBridge` and above;
+     * - `Intel/Haswell` as Intel V3,  the version of Intel CPU platform selected by system will be `Intel/Haswell` and above;
+     * - `Intel/Broadwell` as Intel V4, the version of Intel CPU platform selected by system will be `Intel/Broadwell` and above;
+     * - `Intel/Skylake` as Intel V5, the version of Intel CPU platform selected by system will be `Intel/Skylake` and above;
+     * - `Intel/Cascadelake` as Intel V6, the version of Intel CPU platform selected by system will be `Intel/Cascadelake`;
+     * - The AMD CPU platform:
+     * - `Amd/Auto` as the Amd CPU platform version will be selected randomly by system;
+     * - `Amd/Epyc2` as the version of Amd CPU platform selected by system will be `Amd/Epyc2` and above;
+     */
+    minCpuPlatform?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The private IP address assigned to the instance.
+     */
+    privateIp?: pulumi.Input<string>;
+    /**
+     * The remarks of instance. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    rootPassword?: pulumi.Input<string>;
+    /**
+     * The ID of the associated security group.
+     */
+    securityGroup?: pulumi.Input<string>;
+    /**
+     * The ID of subnet. If defined `vpcId`, the `subnetId` is Required. If not defined `vpcId` and `subnetId`, the instance will use the default subnet in the current region.
+     */
+    subnetId?: pulumi.Input<string>;
+    /**
+     * A tag assigned to instance, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The user data to customize the startup behaviors when launching the instance. You may refer to [userDataDocument](https://docs.ucloud.cn/uhost/guide/metadata/userdata)
+     */
+    userData?: pulumi.Input<string>;
+    /**
+     * The ID of VPC linked to the instance. If not defined `vpcId`, the instance will use the default VPC in the current region.
+     */
+    vpcId?: pulumi.Input<string>;
 }

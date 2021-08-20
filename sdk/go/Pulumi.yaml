@@ -1,3 +1,0 @@
-name: ucloud
-description: A Pulumi resource provider for ucloud.
-language: go

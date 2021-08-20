@@ -2,10 +2,33 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "../types/input";
-import * as outputs from "../types/output";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
+/**
+ * The UCloud Redis instance is a key-value online storage service compatible with the Redis protocol.
+ *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as ucloud from "@pulumi/ucloud";
+ *
+ * const default = ucloud.uaccount.getZone({});
+ * const master = new ucloud.umem.RedisInstance("master", {
+ *     availabilityZone: _default.then(_default => _default.zones[0].id),
+ *     instanceType: "redis-master-2",
+ *     password: "2018_Tfacc",
+ *     engineVersion: "4.0",
+ *     tag: "tf-example",
+ * });
+ * const distributed = new ucloud.umem.RedisInstance("distributed", {
+ *     availabilityZone: _default.then(_default => _default.zones[0].id),
+ *     instanceType: "redis-distributed-16",
+ *     tag: "tf-example",
+ * });
+ * ```
+ */
 export class RedisInstance extends pulumi.CustomResource {
     /**
      * Get an existing RedisInstance resource's state with the given name, ID, and optional extra
@@ -14,6 +37,7 @@ export class RedisInstance extends pulumi.CustomResource {
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
     public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: RedisInstanceState, opts?: pulumi.CustomResourceOptions): RedisInstance {
         return new RedisInstance(name, <any>state, { ...opts, id: id });
@@ -33,19 +57,55 @@ export class RedisInstance extends pulumi.CustomResource {
         return obj['__pulumiType'] === RedisInstance.__pulumiType;
     }
 
+    /**
+     * Availability zone where Redis instance is located. Such as: "cn-bj2-02". You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+     */
     public readonly availabilityZone!: pulumi.Output<string>;
+    /**
+     * The charge type of Redis instance, possible values are: `year`, `month` and `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
     public readonly chargeType!: pulumi.Output<string>;
+    /**
+     * The creation time of Redis instance, formatted by RFC3339 time string.
+     */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
+    /**
+     * The duration that you will buy the Redis instance (Default: `1`). The value is `0` when pay by month and the instance will be valid till the last day of that month. It is not required when `dynamic` (pay by hour).
+     */
     public readonly duration!: pulumi.Output<number | undefined>;
+    /**
+     * The version of engine of active-standby Redis. Possible values are: 3.0, 3.2, 4.0 and 5.0.
+     */
     public readonly engineVersion!: pulumi.Output<string>;
+    /**
+     * The expiration time of Redis instance, formatted by RFC3339 time string.
+     */
     public /*out*/ readonly expireTime!: pulumi.Output<string>;
     public readonly instanceType!: pulumi.Output<string>;
+    /**
+     * ip_set is a nested type. ipSet documented below.
+     */
     public /*out*/ readonly ipSets!: pulumi.Output<outputs.umem.RedisInstanceIpSet[]>;
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The password for  active-standby Redis instance which should have 6-36 characters. It must contain at least 3 items of Capital letters, small letter, numbers and special characters. The special characters include `-_`.
+     */
     public readonly password!: pulumi.Output<string | undefined>;
+    /**
+     * The status of KV Redis instance.
+     */
     public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
+     * The ID of subnet linked to the Redis instance.
+     */
     public readonly subnetId!: pulumi.Output<string>;
+    /**
+     * A tag assigned to Redis instance, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
     public readonly tag!: pulumi.Output<string>;
+    /**
+     * The ID of VPC linked to the Redis instance.
+     */
     public readonly vpcId!: pulumi.Output<string>;
 
     /**
@@ -58,7 +118,8 @@ export class RedisInstance extends pulumi.CustomResource {
     constructor(name: string, args: RedisInstanceArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: RedisInstanceArgs | RedisInstanceState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
+        opts = opts || {};
+        if (opts.id) {
             const state = argsOrState as RedisInstanceState | undefined;
             inputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             inputs["chargeType"] = state ? state.chargeType : undefined;
@@ -76,10 +137,10 @@ export class RedisInstance extends pulumi.CustomResource {
             inputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as RedisInstanceArgs | undefined;
-            if (!args || args.availabilityZone === undefined) {
+            if ((!args || args.availabilityZone === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'availabilityZone'");
             }
-            if (!args || args.instanceType === undefined) {
+            if ((!args || args.instanceType === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'instanceType'");
             }
             inputs["availabilityZone"] = args ? args.availabilityZone : undefined;
@@ -97,12 +158,8 @@ export class RedisInstance extends pulumi.CustomResource {
             inputs["ipSets"] = undefined /*out*/;
             inputs["status"] = undefined /*out*/;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
         super(RedisInstance.__pulumiType, name, inputs, opts);
     }
@@ -112,34 +169,94 @@ export class RedisInstance extends pulumi.CustomResource {
  * Input properties used for looking up and filtering RedisInstance resources.
  */
 export interface RedisInstanceState {
-    readonly availabilityZone?: pulumi.Input<string>;
-    readonly chargeType?: pulumi.Input<string>;
-    readonly createTime?: pulumi.Input<string>;
-    readonly duration?: pulumi.Input<number>;
-    readonly engineVersion?: pulumi.Input<string>;
-    readonly expireTime?: pulumi.Input<string>;
-    readonly instanceType?: pulumi.Input<string>;
-    readonly ipSets?: pulumi.Input<pulumi.Input<inputs.umem.RedisInstanceIpSet>[]>;
-    readonly name?: pulumi.Input<string>;
-    readonly password?: pulumi.Input<string>;
-    readonly status?: pulumi.Input<string>;
-    readonly subnetId?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId?: pulumi.Input<string>;
+    /**
+     * Availability zone where Redis instance is located. Such as: "cn-bj2-02". You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+     */
+    availabilityZone?: pulumi.Input<string>;
+    /**
+     * The charge type of Redis instance, possible values are: `year`, `month` and `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
+    chargeType?: pulumi.Input<string>;
+    /**
+     * The creation time of Redis instance, formatted by RFC3339 time string.
+     */
+    createTime?: pulumi.Input<string>;
+    /**
+     * The duration that you will buy the Redis instance (Default: `1`). The value is `0` when pay by month and the instance will be valid till the last day of that month. It is not required when `dynamic` (pay by hour).
+     */
+    duration?: pulumi.Input<number>;
+    /**
+     * The version of engine of active-standby Redis. Possible values are: 3.0, 3.2, 4.0 and 5.0.
+     */
+    engineVersion?: pulumi.Input<string>;
+    /**
+     * The expiration time of Redis instance, formatted by RFC3339 time string.
+     */
+    expireTime?: pulumi.Input<string>;
+    instanceType?: pulumi.Input<string>;
+    /**
+     * ip_set is a nested type. ipSet documented below.
+     */
+    ipSets?: pulumi.Input<pulumi.Input<inputs.umem.RedisInstanceIpSet>[]>;
+    name?: pulumi.Input<string>;
+    /**
+     * The password for  active-standby Redis instance which should have 6-36 characters. It must contain at least 3 items of Capital letters, small letter, numbers and special characters. The special characters include `-_`.
+     */
+    password?: pulumi.Input<string>;
+    /**
+     * The status of KV Redis instance.
+     */
+    status?: pulumi.Input<string>;
+    /**
+     * The ID of subnet linked to the Redis instance.
+     */
+    subnetId?: pulumi.Input<string>;
+    /**
+     * A tag assigned to Redis instance, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The ID of VPC linked to the Redis instance.
+     */
+    vpcId?: pulumi.Input<string>;
 }
 
 /**
  * The set of arguments for constructing a RedisInstance resource.
  */
 export interface RedisInstanceArgs {
-    readonly availabilityZone: pulumi.Input<string>;
-    readonly chargeType?: pulumi.Input<string>;
-    readonly duration?: pulumi.Input<number>;
-    readonly engineVersion?: pulumi.Input<string>;
-    readonly instanceType: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly password?: pulumi.Input<string>;
-    readonly subnetId?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId?: pulumi.Input<string>;
+    /**
+     * Availability zone where Redis instance is located. Such as: "cn-bj2-02". You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+     */
+    availabilityZone: pulumi.Input<string>;
+    /**
+     * The charge type of Redis instance, possible values are: `year`, `month` and `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
+    chargeType?: pulumi.Input<string>;
+    /**
+     * The duration that you will buy the Redis instance (Default: `1`). The value is `0` when pay by month and the instance will be valid till the last day of that month. It is not required when `dynamic` (pay by hour).
+     */
+    duration?: pulumi.Input<number>;
+    /**
+     * The version of engine of active-standby Redis. Possible values are: 3.0, 3.2, 4.0 and 5.0.
+     */
+    engineVersion?: pulumi.Input<string>;
+    instanceType: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The password for  active-standby Redis instance which should have 6-36 characters. It must contain at least 3 items of Capital letters, small letter, numbers and special characters. The special characters include `-_`.
+     */
+    password?: pulumi.Input<string>;
+    /**
+     * The ID of subnet linked to the Redis instance.
+     */
+    subnetId?: pulumi.Input<string>;
+    /**
+     * A tag assigned to Redis instance, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The ID of VPC linked to the Redis instance.
+     */
+    vpcId?: pulumi.Input<string>;
 }

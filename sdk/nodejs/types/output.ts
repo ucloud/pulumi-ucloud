@@ -2,378 +2,1116 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as outputs from "../types/output";
-
-export interface LookupProjectsProject {
-    createTime: string;
-    id: string;
-    memberCount: number;
-    name: string;
-    parentId: string;
-    parentName: string;
-    resourceCount: number;
-}
-
-export interface LookupZonesZone {
-    id: string;
-}
+import { input as inputs, output as outputs } from "../types";
 
 export namespace ipsecvpn {
-    export interface LookupVpnConnectionsVpnConnection {
+    export interface GetVPNConnectionVpnConnection {
+        /**
+         * The time of creation for VPN Connection, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The ID of VPN Customer Gateway.
+         */
         customerGatewayId: string;
+        /**
+         * The ID of VPN Connection.
+         */
         id: string;
-        ikeConfigs: outputs.ipsecvpn.LookupVpnConnectionsVpnConnectionIkeConfig[];
-        ipsecConfigs: outputs.ipsecvpn.LookupVpnConnectionsVpnConnectionIpsecConfig[];
+        /**
+         * It is a nested type which documented below.
+         */
+        ikeConfigs: outputs.ipsecvpn.GetVPNConnectionVpnConnectionIkeConfig[];
+        /**
+         * It is a nested type which documented below.
+         */
+        ipsecConfigs: outputs.ipsecvpn.GetVPNConnectionVpnConnectionIpsecConfig[];
+        /**
+         * The name of the VPN Connection.
+         */
         name: string;
+        /**
+         * The remarks of VPN Connection.
+         */
         remark: string;
+        /**
+         * A tag assigned to VPN Connection.
+         */
         tag: string;
+        /**
+         * The ID of VPC linked to the VPN Connection.
+         */
         vpcId: string;
+        /**
+         * The ID of VPN Gateway.
+         */
         vpnGatewayId: string;
     }
 
-    export interface LookupVpnConnectionsVpnConnectionIkeConfig {
+    export interface GetVPNConnectionVpnConnectionIkeConfig {
+        /**
+         * The authentication algorithm of IPSec negotiation.
+         */
         authenticationAlgorithm: string;
+        /**
+         * The Diffie-Hellman group used by IKE negotiation.
+         */
         dhGroup: string;
+        /**
+         * The encryption algorithm of IPSec negotiation.
+         */
         encryptionAlgorithm: string;
+        /**
+         * The negotiation exchange mode of IKE V1 of VPN gateway.
+         */
         exchangeMode: string;
+        /**
+         * The version of the IKE protocol.
+         */
         ikeVersion: string;
+        /**
+         * The identification of the VPN gateway.
+         */
         localId: string;
+        /**
+         * The key used for authentication between the VPN gateway and the Customer gateway.
+         */
         preSharedKey: string;
+        /**
+         * The identification of the Customer gateway.
+         */
         remoteId: string;
+        /**
+         * The Security Association lifecycle as the result of IPSec negotiation.
+         */
         saLifeTime: number;
     }
 
-    export interface LookupVpnConnectionsVpnConnectionIpsecConfig {
+    export interface GetVPNConnectionVpnConnectionIpsecConfig {
+        /**
+         * The authentication algorithm of IPSec negotiation.
+         */
         authenticationAlgorithm: string;
+        /**
+         * The encryption algorithm of IPSec negotiation.
+         */
         encryptionAlgorithm: string;
+        /**
+         * The id list of Local subnet.
+         */
         localSubnetIds: string[];
+        /**
+         * Whether the PFS of IPSec negotiation is on or off, `disable` as off, The Diffie-Hellman group as open.
+         */
         pfsDhGroup: string;
+        /**
+         * The security protocol of IPSec negotiation.
+         */
         protocol: string;
+        /**
+         * The ip address list of remote subnet.
+         */
         remoteSubnets: string[];
+        /**
+         * The Security Association lifecycle as the result of IPSec negotiation.
+         */
         saLifeTime: number;
+        /**
+         * The Security Association lifecycle in bytes as the result of IPSec negotiation.
+         */
         saLifeTimeBytes: number;
     }
 
-    export interface LookupVpnCustomerGatewaysVpnCustomerGateway {
+    export interface GetVPNCustomerGatewayVpnCustomerGateway {
+        /**
+         * The time of creation for VPN Customer Gateway, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The ID of VPN Customer Gateway.
+         */
         id: string;
+        /**
+         * The ip address of the VPN Customer Gateway.
+         */
         ipAddress: string;
+        /**
+         * The name of the VPN Customer Gateway.
+         */
         name: string;
+        /**
+         * The remarks of VPN Customer Gateway.
+         */
         remark: string;
+        /**
+         * A tag assigned to VPN Customer Gateway.
+         */
         tag: string;
     }
 
-    export interface LookupVpnGatewaysVpnGateway {
+    export interface GetVPNGatewayVpnGateway {
+        /**
+         * Whether to renew an VPN Gateway automatically or not.
+         */
         autoRenew: boolean;
+        /**
+         * The charge type of VPN Gateway.
+         */
         chargeType: string;
+        /**
+         * The time of creation for VPN Gateway, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The expiration time for VPN Gateway, formatted in RFC3339 time string.
+         */
         expireTime: string;
+        /**
+         * The type of the VPN Gateway.
+         */
         grade: string;
+        /**
+         * The ID of VPN Gateway.
+         */
         id: string;
-        ipSets: outputs.ipsecvpn.LookupVpnGatewaysVpnGatewayIpSet[];
+        /**
+         * It is a nested type which documented below.
+         */
+        ipSets: outputs.ipsecvpn.GetVPNGatewayVpnGatewayIpSet[];
+        /**
+         * The name of the VPN Gateway.
+         */
         name: string;
+        /**
+         * The remarks of VPN Gateway.
+         */
         remark: string;
+        /**
+         * A tag assigned to VPN Gateway.
+         */
         tag: string;
+        /**
+         * The ID of VPC linked to the VPN Gateway.
+         */
         vpcId: string;
     }
 
-    export interface LookupVpnGatewaysVpnGatewayIpSet {
+    export interface GetVPNGatewayVpnGatewayIpSet {
+        /**
+         * Type of Elastic IP routes.
+         */
         internetType: string;
+        /**
+         * Elastic IP address.
+         */
         ip: string;
     }
 
-    export interface VpnConnectionIkeConfig {
+    export interface VPNConnectionIkeConfig {
+        /**
+         * The authentication algorithm of IPSec negotiation. Possible values: `sha1`, `md5`. (Default: `sha1`)
+         */
         authenticationAlgorithm?: string;
+        /**
+         * The Diffie-Hellman group used by IKE negotiation. Possible values: `1`, `2`, `5`, `14`, `15`, `16`. (Default:`15`)
+         */
         dhGroup?: string;
+        /**
+         * The encryption algorithm of IPSec negotiation. Possible values: `aes128`, `aes192`, `aes256`, `aes512`, `3des`. (Default: `aes128`).
+         */
         encryptionAlgorithm?: string;
+        /**
+         * The negotiation exchange mode of IKE V1 of VPN gateway. Possible values: `main` (main mode), `aggressive` (aggressive mode). (Default: `main`)
+         */
         exchangeMode?: string;
+        /**
+         * The version of the IKE protocol which only be supported IKE V1 protocol at present. Possible values: ikev1. (Default: ikev1)
+         */
         ikeVersion?: string;
+        /**
+         * The identification of the VPN gateway.
+         */
         localId: string;
+        /**
+         * The key used for authentication between the VPN gateway and the Customer gateway which contains 1-128 characters and only support English, numbers and special characters: `!@#$%^&*()_+-=[]:,./'~`.
+         */
         preSharedKey: string;
+        /**
+         * The identification of the Customer gateway.
+         */
         remoteId: string;
+        /**
+         * The Security Association lifecycle as the result of IPSec negotiation. Unit: second. Range: 1200-604800. (Default: `3600`)
+         */
         saLifeTime?: number;
     }
 
-    export interface VpnConnectionIpsecConfig {
+    export interface VPNConnectionIpsecConfig {
+        /**
+         * The authentication algorithm of IPSec negotiation. Possible values: `sha1`, `md5`. (Default: `sha1`)
+         */
         authenticationAlgorithm?: string;
+        /**
+         * The encryption algorithm of IPSec negotiation. Possible values: `aes128`, `aes192`, `aes256`, `aes512`, `3des`. (Default: `aes128`).
+         */
         encryptionAlgorithm?: string;
+        /**
+         * The id list of Local subnet.
+         */
         localSubnetIds: string[];
+        /**
+         * Whether the PFS of IPSec negotiation is on or off, `disable` as off, The Diffie-Hellman group as open.  Possible values: `disable`, `1`, `2`, `5`, `14`, `15`, `16`. (Default:`disable`)
+         */
         pfsDhGroup?: string;
+        /**
+         * The security protocol of IPSec negotiation. Possible values: `esp`, `ah`. (Default:`esp`)
+         */
         protocol?: string;
+        /**
+         * The ip address list of remote subnet.
+         */
         remoteSubnets: string[];
+        /**
+         * The Security Association lifecycle as the result of IPSec negotiation. Unit: second. Range: 1200-604800. (Default: `3600`)
+         */
         saLifeTime?: number;
+        /**
+         * The Security Association lifecycle in bytes as the result of IPSec negotiation. Unit: second. Range: 1200-604800. (Default: `3600`)
+         */
         saLifeTimeBytes: number;
+    }
+}
+
+export namespace uaccount {
+    export interface GetProjectProject {
+        /**
+         * The time of creation for instance, formatted in RFC3339 time string.
+         */
+        createTime: string;
+        /**
+         * The ID of project defined.
+         */
+        id: string;
+        /**
+         * The number of members belongs to the defined project.
+         */
+        memberCount: number;
+        /**
+         * The name of the defined project.
+         */
+        name: string;
+        /**
+         * The ID of the parent project where the sub project belongs to.
+         */
+        parentId: string;
+        /**
+         * The name of the parent project where the sub project belongs to.
+         */
+        parentName: string;
+        /**
+         * The number of the resounce instance belong/s to the defined project.
+         */
+        resourceCount: number;
+    }
+
+    export interface GetZoneZone {
+        /**
+         * The ID of availability zone.
+         */
+        id: string;
     }
 }
 
 export namespace udb {
-    export interface LookupDbInstancesDbInstance {
+    export interface GetDBInstanceDbInstance {
+        /**
+         * Availability zone where database instances are located. Such as: "cn-bj2-02". You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+         */
         availabilityZone: string;
+        /**
+         * Specifies when the backup starts, measured in hour.
+         */
         backupBeginTime: number;
+        /**
+         * The backup for database instance such as "test.%" or table such as "city.address" specified in the black lists are not supported.
+         */
         backupBlackLists: string[];
+        /**
+         * Specifies the number of backup saved per week.
+         */
         backupCount: number;
+        /**
+         * Specifies whether the backup took place from Sunday to Saturday by displaying 7 digits. 0 stands for backup disabled and 1 stands for backup enabled. The rightmost digit specifies whether the backup took place on Sunday, and the digits from right to left specify whether the backup took place from Monday to Saturday, it's mandatory required to backup twice per week at least. such as: digits "1100000" stands for the backup took place on Saturday and Friday.
+         */
         backupDate: string;
+        /**
+         * The charge type of db instance.
+         */
         chargeType: string;
+        /**
+         * The creation time of database instance , formatted by RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The type of database instance engine.
+         */
         engine: string;
+        /**
+         * The database instance engine version.
+         */
         engineVersion: string;
+        /**
+         * The expiration time of database instance , formatted by RFC3339 time string.
+         */
         expireTime: string;
+        /**
+         * The ID of database instance.
+         */
         id: string;
+        /**
+         * Specifies the allocated storage size in gigabytes (GB).
+         */
         instanceStorage: number;
+        /**
+         * Specifies the type of database instance.
+         */
         instanceType: string;
+        /**
+         * The modification time of database instance , formatted by RFC3339 time string.
+         */
         modifyTime: string;
+        /**
+         * The name of database instance.
+         */
         name: string;
+        /**
+         * The port on which the database instance accepts connections.
+         */
         port: number;
+        /**
+         * The private IP address assigned to the database instance.
+         */
         privateIp: string;
+        /**
+         * Availability zone where the standby database instance is located for the high availability database instance with multiple zone.
+         */
         standbyZone: string;
+        /**
+         * Specifies the status of database instance , possible values are: `Init`, `Fail`, `Starting`, `Running`, `Shutdown`, `Shutoff`, `Delete`, `Upgrading`, `Promoting`, `Recovering` and `Recover fail`.
+         */
         status: string;
+        /**
+         * The ID of subnet linked to the database instances.
+         */
         subnetId: string;
+        /**
+         * A tag assigned to database instance.
+         */
         tag: string;
+        /**
+         * The ID of VPC linked to the database instances.
+         */
         vpcId: string;
     }
 }
 
-export namespace uhost {
-    export interface InstanceDiskSet {
+export namespace udisk {
+    export interface GetDiskDisk {
+        /**
+         * Availability zone where Disk are located. Such as: "cn-bj2-02". You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+         */
+        availabilityZone: string;
+        /**
+         * The charge type of disk. Possible values are: `year` as pay by year, `month` as pay by month, `dynamic` as pay by hour.
+         */
+        chargeType: string;
+        /**
+         * The creation time of Disk, formatted in RFC3339 time string.
+         */
+        createTime: string;
+        /**
+         * The size of disk. Purchase the size of disk in GB.
+         */
+        diskSize: number;
+        /**
+         * The type of disk. Possible values are: `dataDisk`as cloud disk, `ssdDataDisk` as SSD cloud disk, `systemDisk`as system disk, `ssdSystemDisk` as SSD system disk, `rssdDataDisk` as RDMA-SSD cloud disk.
+         */
+        diskType: string;
+        /**
+         * The expiration time of disk, formatted in RFC3339 time string.
+         */
+        expireTime: string;
+        /**
+         * The ID of Disk.
+         */
         id: string;
-        isBoot: boolean;
+        /**
+         * The name of Disk.
+         */
+        name: string;
+        /**
+         * The status of disk. Possible values are: `Available`, `InUse`, `Detaching`, `Initializating`, `Failed`, `Cloning`, `Restoring`, `RestoreFailed`.
+         */
+        status: string;
+        /**
+         * A tag assigned to Disk.
+         */
+        tag: string;
+    }
+}
+
+export namespace uhost {
+    export interface GetImageImage {
+        /**
+         * Availability zone where images are located. such as: `cn-bj2-02`. You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist).
+         */
+        availabilityZone: string;
+        /**
+         * The time of creation for image, formatted in RFC3339 time string.
+         */
+        createTime: string;
+        /**
+         * The description of image if any.
+         */
+        description: string;
+        /**
+         * To identify if any particular feature belongs to the instance, the value is `NetEnhnced` as I/O enhanced instance for now.
+         */
+        features: string[];
+        /**
+         * The ID of image.
+         */
+        id: string;
+        /**
+         * The name of image.
+         */
+        name: string;
+        /**
+         * The name of OS.
+         */
+        osName: string;
+        /**
+         * The type of OS. Possible values are: `linux` and `windows`, all the OS types will be retrieved by default.
+         */
+        osType: string;
+        /**
+         * The size of image.
+         */
         size: number;
+        /**
+         * The status of image. Possible values are `Available`, `Making` and `Unavailable`.
+         */
+        status: string;
+        /**
+         * The type of image.
+         */
+        type: string;
+    }
+
+    export interface GetInstanceInstance {
+        /**
+         * Whether to renew an instance automatically or not.
+         */
+        autoRenew: boolean;
+        /**
+         * Availability zone where instances are located. Such as: "cn-bj2-02". You may refer to [list of availability zone](https://docs.ucloud.cn/api/summary/regionlist)
+         */
+        availabilityZone: string;
+        /**
+         * The charge type of instance, possible values are: `year`, `month` and `dynamic` as pay by hour.
+         */
+        chargeType: string;
+        /**
+         * The number of cores of virtual CPU, measureed in core.
+         */
+        cpu: number;
+        /**
+         * The time of creation for instance, formatted in RFC3339 time string.
+         */
+        createTime: string;
+        /**
+         * It is a nested type which documented below.
+         */
+        diskSets: outputs.uhost.GetInstanceInstanceDiskSet[];
+        /**
+         * The expiration time for instance, formatted in RFC3339 time string.
+         */
+        expireTime: string;
+        /**
+         * The ID of disk.
+         */
+        id: string;
+        /**
+         * The type of instance.
+         */
+        instanceType: string;
+        /**
+         * It is a nested type which documented below.
+         */
+        ipSets: outputs.uhost.GetInstanceInstanceIpSet[];
+        /**
+         * The size of memory, measured in MB (Megabyte).
+         */
+        memory: number;
+        /**
+         * The name of the instance.
+         */
+        name: string;
+        /**
+         * The private IP address assigned to the instance.
+         */
+        privateIp: string;
+        /**
+         * The remarks of instance.
+         */
+        remark: string;
+        /**
+         * Instance current status. Possible values are `Initializing`, `Starting`, `Running`, `Stopping`, `Stopped`, `Install Fail` and `Rebooting`.
+         */
+        status: string;
+        /**
+         * The ID of subnet linked to the instance.
+         */
+        subnetId: string;
+        /**
+         * A tag assigned to instance.
+         */
+        tag: string;
+        /**
+         * The ID of VPC linked to the instance.
+         */
+        vpcId: string;
+    }
+
+    export interface GetInstanceInstanceDiskSet {
+        /**
+         * The ID of disk.
+         */
+        id: string;
+        /**
+         * Specifies whether boot disk or not.
+         */
+        isBoot: boolean;
+        /**
+         * The size of disk, measured in GB (Gigabyte).
+         */
+        size: number;
+        /**
+         * The type of disk.
+         */
+        type: string;
+    }
+
+    export interface GetInstanceInstanceIpSet {
+        /**
+         * Type of Elastic IP routes.
+         */
+        internetType: string;
+        /**
+         * Elastic IP address.
+         */
+        ip: string;
+    }
+
+    export interface InstanceDataDisks {
+        /**
+         * The size of the cloud data disk, range 20-8000, measured in GB (GigaByte).
+         */
+        size: number;
+        /**
+         * The type of the cloud data disk. Possible values are: `cloudNormal` and `cloudSsd` for local boot disk, `cloudSsd` for cloud SSD boot disk.
+         */
+        type: string;
+    }
+
+    export interface InstanceDiskSet {
+        /**
+         * The ID of disk.
+         */
+        id: string;
+        /**
+         * Specifies whether boot disk or not.
+         */
+        isBoot: boolean;
+        /**
+         * The size of the cloud data disk, range 20-8000, measured in GB (GigaByte).
+         */
+        size: number;
+        /**
+         * The type of the cloud data disk. Possible values are: `cloudNormal` and `cloudSsd` for local boot disk, `cloudSsd` for cloud SSD boot disk.
+         */
         type: string;
     }
 
     export interface InstanceIpSet {
+        /**
+         * Type of Elastic IP routes. Possible values are: `International` as international BGP IP, `BGP` as china BGP IP and `Private` as private IP.
+         */
         internetType: string;
-        ip: string;
-    }
-
-    export interface LookupDisksDisk {
-        availabilityZone: string;
-        chargeType: string;
-        createTime: string;
-        diskSize: number;
-        diskType: string;
-        expireTime: string;
-        id: string;
-        name: string;
-        status: string;
-        tag: string;
-    }
-
-    export interface LookupImagesImage {
-        availabilityZone: string;
-        createTime: string;
-        description: string;
-        features: string[];
-        id: string;
-        name: string;
-        osName: string;
-        osType: string;
-        size: number;
-        status: string;
-        type: string;
-    }
-
-    export interface LookupInstancesInstance {
-        autoRenew: boolean;
-        availabilityZone: string;
-        chargeType: string;
-        cpu: number;
-        createTime: string;
-        diskSets: outputs.uhost.LookupInstancesInstanceDiskSet[];
-        expireTime: string;
-        id: string;
-        instanceType: string;
-        ipSets: outputs.uhost.LookupInstancesInstanceIpSet[];
-        memory: number;
-        name: string;
-        privateIp: string;
-        remark: string;
-        status: string;
-        subnetId: string;
-        tag: string;
-        vpcId: string;
-    }
-
-    export interface LookupInstancesInstanceDiskSet {
-        id: string;
-        isBoot: boolean;
-        size: number;
-        type: string;
-    }
-
-    export interface LookupInstancesInstanceIpSet {
-        internetType: string;
+        /**
+         * Elastic IP address.
+         */
         ip: string;
     }
 }
 
 export namespace ulb {
-    export interface LbIpSet {
-        internetType: string;
-        ip: string;
-    }
-
-    export interface LookupLbAttachmentsLbAttachment {
+    export interface GetLBAttachmentLbAttachment {
+        /**
+         * The ID of LB Attachment.
+         */
         id: string;
+        /**
+         * Port opened on the backend server to receive requests, range: 1-65535.
+         */
         port: number;
+        /**
+         * The private ip address for backend servers.
+         */
         privateIp: string;
+        /**
+         * The ID of a backend server.
+         */
         resourceId: string;
+        /**
+         * The status of backend servers. Possible values are: `normalRunning`, `exceptionRunning`.
+         */
         status: string;
     }
 
-    export interface LookupLbListenersLbListener {
-        domain: string;
-        healthCheckType: string;
-        id: string;
-        idleTimeout: number;
-        listenType: string;
-        method: string;
-        name: string;
-        path: string;
-        persistence: string;
-        persistenceType: string;
-        port: number;
-        protocol: string;
-        status: string;
-    }
-
-    export interface LookupLbRulesLbRule {
-        domain: string;
-        id: string;
-        path: string;
-    }
-
-    export interface LookupLbSslsLbSsl {
+    export interface GetLBLb {
+        /**
+         * The creation time of Load Balancer, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The ID of Load Balancer.
+         */
         id: string;
-        name: string;
-    }
-
-    export interface LookupLbsLb {
-        createTime: string;
-        id: string;
+        /**
+         * Indicate whether the load balancer is intranet.
+         */
         internal: boolean;
-        ipSets: outputs.ulb.LookupLbsLbIpSet[];
+        ipSets: outputs.ulb.GetLBLbIpSet[];
+        /**
+         * The name of Load Balancer.
+         */
         name: string;
+        /**
+         * The IP address of intranet IP.
+         */
         privateIp: string;
+        /**
+         * The remarks of Load Balancer.
+         */
         remark: string;
+        /**
+         * The ID of subnet that intrant load balancer belongs to.
+         */
         subnetId: string;
+        /**
+         * A tag assigned to Load Balancer.
+         */
         tag: string;
+        /**
+         * The ID of the VPC linked to the Load Balancers.
+         */
         vpcId: string;
     }
 
-    export interface LookupLbsLbIpSet {
+    export interface GetLBLbIpSet {
+        /**
+         * Type of Load Balancer routes.
+         */
         internetType: string;
+        /**
+         * Load Balancer address.
+         */
+        ip: string;
+    }
+
+    export interface GetLBListenersLbListener {
+        /**
+         * Health check domain checking.
+         */
+        domain: string;
+        /**
+         * Health check method. Possible values are `port` as port checking and `path` as http checking.
+         */
+        healthCheckType: string;
+        /**
+         * The ID of LB Listener.
+         */
+        id: string;
+        /**
+         * Amount of time in seconds to wait for the response for in between two sessions if `listenType` is `requestProxy`, range: 0-86400. Amount of time in seconds to wait for one session if `listenType` is `packetsTransmit`, range: 60-900. The session will be closed as soon as no response if it is `0`.
+         */
+        idleTimeout: number;
+        /**
+         * The type of LB Listener. Possible values are `requestProxy` and `packetsTransmit`.
+         */
+        listenType: string;
+        /**
+         * The load balancer method in which the listener is. Possible values are: `roundrobin`, `source`, `consistentHash`, `sourcePort` , `consistentHashPort`, `weightRoundrobin` and `leastconn`. 
+         * - The `consistentHash`, `sourcePort` , `consistentHashPort`, `roundrobin`, `source` and `weightRoundrobin` are valid if `listenType` is `packetsTransmit`.
+         * - The `rundrobin`, `source` and `weightRoundrobin` and `leastconn` are vaild if `listenType` is `requestProxy`.
+         */
+        method: string;
+        /**
+         * The name of LB Listener.
+         */
+        name: string;
+        /**
+         * Health check path checking.
+         */
+        path: string;
+        /**
+         * Indicate whether the persistence session is enabled, it is invaild if `persistenceType` is `none`, an auto-generated string will be exported if `persistenceType` is `serverInsert`, a custom string will be exported if `persistenceType` is `userDefined`.
+         */
+        persistence: string;
+        /**
+         * The type of session persistence of LB Listener. Possible values are: `none` as disabled, `serverInsert` as auto-generated string and `userDefined` as cutom string. (Default: `none`).
+         */
+        persistenceType: string;
+        /**
+         * Port opened on the LB Listener to receive requests, range: 1-65535.
+         */
+        port: number;
+        /**
+         * LB Listener protocol. Possible values: `http`, `https` if `listenType` is `requestProxy`, `tcp` and `udp` if `listenType` is `packetsTransmit`.
+         */
+        protocol: string;
+        /**
+         * LB Listener status. Possible values are: `allNormal` for all resource functioning well, `partNormal` for partial resource functioning well and `allException` for all resource functioning exceptional.
+         */
+        status: string;
+    }
+
+    export interface GetLBRulesLbRule {
+        /**
+         * (Optional) The domain of content forward matching fields. `path` and `domain` cannot coexist.
+         */
+        domain: string;
+        /**
+         * The ID of LB Rule.
+         */
+        id: string;
+        /**
+         * (Optional) The path of Content forward matching fields. `path` and `domain` cannot coexist.
+         */
+        path: string;
+    }
+
+    export interface GetLBSslLbSsl {
+        /**
+         * The time of creation for lb ssl, formatted in RFC3339 time string.
+         */
+        createTime: string;
+        /**
+         * The ID of LB SSL certificate resource.
+         */
+        id: string;
+        /**
+         * The name of LB SSL certificate resource.
+         */
+        name: string;
+    }
+
+    export interface LBIpSet {
+        /**
+         * Type of Elastic IP routes.
+         */
+        internetType: string;
+        /**
+         * Elastic IP address.
+         */
         ip: string;
     }
 }
 
 export namespace umem {
-    export interface MemcacheInstanceIpSet {
+    export interface MemcachedInstanceIpSet {
+        /**
+         * The virtual ip of Memcache instance.
+         */
         ip: string;
+        /**
+         * The port on which Memcache instance accepts connections, it is 6379 by default.
+         */
         port: number;
     }
 
     export interface RedisInstanceIpSet {
+        /**
+         * The virtual ip of Redis instance.
+         */
         ip: string;
+        /**
+         * The port on which Redis instance accepts connections, it is 6379 by default.
+         */
         port: number;
     }
 }
 
 export namespace unet {
-    export interface EipIpSet {
+    export interface EIPIpSet {
+        /**
+         * Type of Elastic IP routes. Possible values are: `international` as international BGP IP and `bgp` as china mainland BGP IP.
+         */
         internetType: string;
         ip: string;
     }
 
-    export interface EipResource {
+    export interface EIPResource {
+        /**
+         * The ID of the resource with EIP attached.
+         */
         id: string;
+        /**
+         * The type of resource with EIP attached. Possible values are `instance` as instance, `lb` as load balancer.
+         */
         type: string;
     }
 
-    export interface LookupEipsEip {
+    export interface GetEIPEip {
+        /**
+         * Maximum bandwidth to the elastic public network, measured in Mbps.
+         */
         bandwidth: number;
+        /**
+         * The charge mode of Elastic IP. Possible values are: `traffic` as pay by traffic, `bandwidth` as pay by bandwidth.
+         */
         chargeMode: string;
+        /**
+         * The charge type of Elastic IP. Possible values are: `year` as pay by year, `month` as pay by month, `dynamic` as pay by hour.
+         */
         chargeType: string;
+        /**
+         * The creation time of Elastic IP, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The expiration time for Elastic IP, formatted in RFC3339 time string.
+         */
         expireTime: string;
-        ipSets: outputs.unet.LookupEipsEipIpSet[];
+        /**
+         * It is a nested type which documented below.
+         */
+        ipSets: outputs.unet.GetEIPEipIpSet[];
+        /**
+         * The name of Elastic IP.
+         */
         name: string;
+        /**
+         * The remarks of Elastic IP.
+         */
         remark: string;
+        /**
+         * Elastic IP status. Possible values are: `used` as in use, `free` as available and `freeze` as associating.
+         */
         status: string;
+        /**
+         * A tag assigned to Elastic IP.
+         */
         tag: string;
     }
 
-    export interface LookupEipsEipIpSet {
+    export interface GetEIPEipIpSet {
+        /**
+         * Type of Elastic IP routes.
+         */
         internetType: string;
+        /**
+         * Elastic IP address.
+         */
         ip: string;
     }
 
-    export interface LookupSecurityGroupsSecurityGroup {
+    export interface GetSecurityGroupSecurityGroup {
+        /**
+         * The time of creation for the security group, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The ID of Security Group.
+         */
         id: string;
+        /**
+         * The name of Security Group.
+         */
         name: string;
+        /**
+         * The remarks of the security group.
+         */
         remark: string;
-        rules: outputs.unet.LookupSecurityGroupsSecurityGroupRule[];
+        /**
+         * It is a nested type which documented below.
+         */
+        rules: outputs.unet.GetSecurityGroupSecurityGroupRule[];
+        /**
+         * A tag assigned to the security group.
+         */
         tag: string;
+        /**
+         * The type of Security Group. Possible values are: `recommendWeb` as the default Web security group that UCloud recommend to users, default opened port include 80, 443, 22, 3389, `recommendNonWeb` as the default non Web security group that UCloud recommend to users, default opened port include 22, 3389, `userDefined` as the security groups defined by users. You may refer to [security group](https://docs.ucloud.cn/network/firewall/firewall.html).
+         */
         type: string;
     }
 
-    export interface LookupSecurityGroupsSecurityGroupRule {
+    export interface GetSecurityGroupSecurityGroupRule {
+        /**
+         * The cidr block of source.
+         */
         cidrBlock: string;
+        /**
+         * Authorization policy. Can be either `accept` or `drop`.
+         */
         policy: string;
+        /**
+         * The range of port numbers, range: 1-65535. (eg: `port` or `port1-port2`).
+         */
         portRange: string;
+        /**
+         * Rule priority. Can be `high`, `medium`, `low`.
+         */
         priority: string;
+        /**
+         * The protocol. Can be `tcp`, `udp`, `icmp`, `gre`.
+         */
         protocol: string;
     }
 
     export interface SecurityGroupRule {
+        /**
+         * The cidr block of source.
+         */
         cidrBlock?: string;
+        /**
+         * Authorization policy. Possible values are: `accept`, `drop`.
+         */
         policy?: string;
+        /**
+         * The range of port numbers, range: 1-65535. (eg: `port` or `port1-port2`).
+         */
         portRange?: string;
+        /**
+         * Rule priority. Possible values are: `high`, `medium`, `low`.
+         */
         priority?: string;
+        /**
+         * The protocol. Possible values are: `tcp`, `udp`, `icmp`, `gre`.
+         */
         protocol?: string;
     }
 }
 
 export namespace vpc {
-    export interface LookupNatGatewaysNatGateway {
+    export interface GetNATGatewayNatGateway {
+        /**
+         * The time of creation for Nat Gateway, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The ID of Nat Gateway.
+         */
         id: string;
-        ipSets: outputs.vpc.LookupNatGatewaysNatGatewayIpSet[];
+        /**
+         * It is a nested type which documented below.
+         */
+        ipSets: outputs.vpc.GetNATGatewayNatGatewayIpSet[];
+        /**
+         * The name of the Nat Gateway.
+         */
         name: string;
+        /**
+         * The remarks of Nat Gateway.
+         */
         remark: string;
         securityGroup: string;
+        /**
+         * The list of subnet ID under the VPC.
+         * * `securityGroup` -The ID of the associated security group.
+         */
         subnetIds: string[];
+        /**
+         * A tag assigned to the Nat Gateway.
+         */
         tag: string;
+        /**
+         * The ID of VPC linked to the Nat Gateway.
+         */
         vpcId: string;
     }
 
-    export interface LookupNatGatewaysNatGatewayIpSet {
+    export interface GetNATGatewayNatGatewayIpSet {
+        /**
+         * Type of Elastic IP routes.
+         */
         internetType: string;
+        /**
+         * Elastic IP address.
+         */
         ip: string;
     }
 
-    export interface LookupSubnetsSubnet {
+    export interface GetSubnetSubnet {
+        /**
+         * The cidr block of the desired Subnet.
+         */
         cidrBlock: string;
+        /**
+         * The time of creation of Subnet, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The ID of Subnet.
+         */
         id: string;
+        /**
+         * The name of Subnet.
+         */
         name: string;
+        /**
+         * The remark of the Subnet.
+         */
         remark: string;
+        /**
+         * A tag assigned to Subnet.
+         */
         tag: string;
     }
 
-    export interface LookupVpcsVpc {
+    export interface GetVPCVpc {
+        /**
+         * The CIDR blocks of VPC.
+         */
         cidrBlocks: string[];
+        /**
+         * The time of creation for VPC, formatted in RFC3339 time string.
+         */
         createTime: string;
+        /**
+         * The ID of VPC.
+         */
         id: string;
+        /**
+         * The name of VPC.
+         */
         name: string;
+        /**
+         * A tag assigned to VPC.
+         */
         tag: string;
+        /**
+         * The time whenever there is a change made to VPC, formatted in RFC3339 time string.
+         */
         updateTime: string;
     }
 
-    export interface VpcNetworkInfo {
+    export interface VPCNetworkInfo {
+        /**
+         * The CIDR block of the VPC.
+         */
         cidrBlock: string;
     }
 }

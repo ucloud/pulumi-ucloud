@@ -2,64 +2,129 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "../types/input";
-import * as outputs from "../types/output";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
-export class Eip extends pulumi.CustomResource {
+/**
+ * Provides an Elastic IP resource.
+ *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as ucloud from "@pulumi/ucloud";
+ *
+ * const example = new ucloud.unet.EIP("example", {
+ *     bandwidth: 2,
+ *     chargeMode: "bandwidth",
+ *     internetType: "bgp",
+ *     tag: "tf-example",
+ * });
+ * ```
+ *
+ * ## Import
+ *
+ * EIP can be imported using the `id`, e.g.
+ *
+ * ```sh
+ *  $ pulumi import ucloud:unet/eIP:EIP example eip-abcdefg
+ * ```
+ */
+export class EIP extends pulumi.CustomResource {
     /**
-     * Get an existing Eip resource's state with the given name, ID, and optional extra
+     * Get an existing EIP resource's state with the given name, ID, and optional extra
      * properties used to qualify the lookup.
      *
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
-    public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: EipState, opts?: pulumi.CustomResourceOptions): Eip {
-        return new Eip(name, <any>state, { ...opts, id: id });
+    public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: EIPState, opts?: pulumi.CustomResourceOptions): EIP {
+        return new EIP(name, <any>state, { ...opts, id: id });
     }
 
     /** @internal */
-    public static readonly __pulumiType = 'ucloud:unet/eip:Eip';
+    public static readonly __pulumiType = 'ucloud:unet/eIP:EIP';
 
     /**
-     * Returns true if the given object is an instance of Eip.  This is designed to work even
+     * Returns true if the given object is an instance of EIP.  This is designed to work even
      * when multiple copies of the Pulumi SDK have been loaded into the same process.
      */
-    public static isInstance(obj: any): obj is Eip {
+    public static isInstance(obj: any): obj is EIP {
         if (obj === undefined || obj === null) {
             return false;
         }
-        return obj['__pulumiType'] === Eip.__pulumiType;
+        return obj['__pulumiType'] === EIP.__pulumiType;
     }
 
+    /**
+     * Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). The ranges for bandwidth are: 1-200 for pay by traffic, 1-800 for pay by bandwidth. (Default: `1`).
+     */
     public readonly bandwidth!: pulumi.Output<number>;
+    /**
+     * -(Optional) Elastic IP charge mode. Possible values are: `traffic` as pay by traffic, `bandwidth` as pay by bandwidth, `shareBandwidth` as share bandwidth mode. (Default: `bandwidth`for the Elastic IP, `shareBandwidth` for the Elastic IP with share bandwidth mode).
+     */
     public readonly chargeMode!: pulumi.Output<string>;
+    /**
+     * Elastic IP charge type. Possible values are: `year` as pay by year, `month` as pay by month, `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
     public readonly chargeType!: pulumi.Output<string>;
+    /**
+     * The time of creation for EIP, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
+    /**
+     * The duration that you will buy the resource. (Default: `1`). It is not required when `dynamic` (pay by hour), the value is `0` when `month`(pay by month) and the instance will be valid till the last day of that month.
+     */
     public readonly duration!: pulumi.Output<number | undefined>;
+    /**
+     * The expiration time for EIP, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly expireTime!: pulumi.Output<string>;
+    /**
+     * Type of Elastic IP routes. Possible values are: `international` as international BGP IP and `bgp` as china mainland BGP IP.
+     */
     public readonly internetType!: pulumi.Output<string>;
-    public /*out*/ readonly ipSets!: pulumi.Output<outputs.unet.EipIpSet[]>;
+    /**
+     * It is a nested type which documented below.
+     */
+    public /*out*/ readonly ipSets!: pulumi.Output<outputs.unet.EIPIpSet[]>;
     public readonly name!: pulumi.Output<string>;
+    /**
+     * Public IP address of Elastic IP.
+     */
     public /*out*/ readonly publicIp!: pulumi.Output<string>;
+    /**
+     * The remarks of the EIP. (Default: `""`).
+     */
     public readonly remark!: pulumi.Output<string>;
-    public /*out*/ readonly resource!: pulumi.Output<outputs.unet.EipResource>;
+    /**
+     * It is a nested type which documented below.
+     */
+    public /*out*/ readonly resource!: pulumi.Output<outputs.unet.EIPResource>;
+    /**
+     * EIP status. Possible values are: `used` as in use, `free` as available and `freeze` as associating.
+     */
     public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
+     * A tag assigned to Elastic IP, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
     public readonly tag!: pulumi.Output<string | undefined>;
 
     /**
-     * Create a Eip resource with the given unique name, arguments, and options.
+     * Create a EIP resource with the given unique name, arguments, and options.
      *
      * @param name The _unique_ name of the resource.
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args: EipArgs, opts?: pulumi.CustomResourceOptions)
-    constructor(name: string, argsOrState?: EipArgs | EipState, opts?: pulumi.CustomResourceOptions) {
+    constructor(name: string, args: EIPArgs, opts?: pulumi.CustomResourceOptions)
+    constructor(name: string, argsOrState?: EIPArgs | EIPState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
-            const state = argsOrState as EipState | undefined;
+        opts = opts || {};
+        if (opts.id) {
+            const state = argsOrState as EIPState | undefined;
             inputs["bandwidth"] = state ? state.bandwidth : undefined;
             inputs["chargeMode"] = state ? state.chargeMode : undefined;
             inputs["chargeType"] = state ? state.chargeType : undefined;
@@ -75,8 +140,8 @@ export class Eip extends pulumi.CustomResource {
             inputs["status"] = state ? state.status : undefined;
             inputs["tag"] = state ? state.tag : undefined;
         } else {
-            const args = argsOrState as EipArgs | undefined;
-            if (!args || args.internetType === undefined) {
+            const args = argsOrState as EIPArgs | undefined;
+            if ((!args || args.internetType === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'internetType'");
             }
             inputs["bandwidth"] = args ? args.bandwidth : undefined;
@@ -94,47 +159,103 @@ export class Eip extends pulumi.CustomResource {
             inputs["resource"] = undefined /*out*/;
             inputs["status"] = undefined /*out*/;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
-        super(Eip.__pulumiType, name, inputs, opts);
+        super(EIP.__pulumiType, name, inputs, opts);
     }
 }
 
 /**
- * Input properties used for looking up and filtering Eip resources.
+ * Input properties used for looking up and filtering EIP resources.
  */
-export interface EipState {
-    readonly bandwidth?: pulumi.Input<number>;
-    readonly chargeMode?: pulumi.Input<string>;
-    readonly chargeType?: pulumi.Input<string>;
-    readonly createTime?: pulumi.Input<string>;
-    readonly duration?: pulumi.Input<number>;
-    readonly expireTime?: pulumi.Input<string>;
-    readonly internetType?: pulumi.Input<string>;
-    readonly ipSets?: pulumi.Input<pulumi.Input<inputs.unet.EipIpSet>[]>;
-    readonly name?: pulumi.Input<string>;
-    readonly publicIp?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly resource?: pulumi.Input<inputs.unet.EipResource>;
-    readonly status?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
+export interface EIPState {
+    /**
+     * Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). The ranges for bandwidth are: 1-200 for pay by traffic, 1-800 for pay by bandwidth. (Default: `1`).
+     */
+    bandwidth?: pulumi.Input<number>;
+    /**
+     * -(Optional) Elastic IP charge mode. Possible values are: `traffic` as pay by traffic, `bandwidth` as pay by bandwidth, `shareBandwidth` as share bandwidth mode. (Default: `bandwidth`for the Elastic IP, `shareBandwidth` for the Elastic IP with share bandwidth mode).
+     */
+    chargeMode?: pulumi.Input<string>;
+    /**
+     * Elastic IP charge type. Possible values are: `year` as pay by year, `month` as pay by month, `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
+    chargeType?: pulumi.Input<string>;
+    /**
+     * The time of creation for EIP, formatted in RFC3339 time string.
+     */
+    createTime?: pulumi.Input<string>;
+    /**
+     * The duration that you will buy the resource. (Default: `1`). It is not required when `dynamic` (pay by hour), the value is `0` when `month`(pay by month) and the instance will be valid till the last day of that month.
+     */
+    duration?: pulumi.Input<number>;
+    /**
+     * The expiration time for EIP, formatted in RFC3339 time string.
+     */
+    expireTime?: pulumi.Input<string>;
+    /**
+     * Type of Elastic IP routes. Possible values are: `international` as international BGP IP and `bgp` as china mainland BGP IP.
+     */
+    internetType?: pulumi.Input<string>;
+    /**
+     * It is a nested type which documented below.
+     */
+    ipSets?: pulumi.Input<pulumi.Input<inputs.unet.EIPIpSet>[]>;
+    name?: pulumi.Input<string>;
+    /**
+     * Public IP address of Elastic IP.
+     */
+    publicIp?: pulumi.Input<string>;
+    /**
+     * The remarks of the EIP. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * It is a nested type which documented below.
+     */
+    resource?: pulumi.Input<inputs.unet.EIPResource>;
+    /**
+     * EIP status. Possible values are: `used` as in use, `free` as available and `freeze` as associating.
+     */
+    status?: pulumi.Input<string>;
+    /**
+     * A tag assigned to Elastic IP, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
 }
 
 /**
- * The set of arguments for constructing a Eip resource.
+ * The set of arguments for constructing a EIP resource.
  */
-export interface EipArgs {
-    readonly bandwidth?: pulumi.Input<number>;
-    readonly chargeMode?: pulumi.Input<string>;
-    readonly chargeType?: pulumi.Input<string>;
-    readonly duration?: pulumi.Input<number>;
-    readonly internetType: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
+export interface EIPArgs {
+    /**
+     * Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). The ranges for bandwidth are: 1-200 for pay by traffic, 1-800 for pay by bandwidth. (Default: `1`).
+     */
+    bandwidth?: pulumi.Input<number>;
+    /**
+     * -(Optional) Elastic IP charge mode. Possible values are: `traffic` as pay by traffic, `bandwidth` as pay by bandwidth, `shareBandwidth` as share bandwidth mode. (Default: `bandwidth`for the Elastic IP, `shareBandwidth` for the Elastic IP with share bandwidth mode).
+     */
+    chargeMode?: pulumi.Input<string>;
+    /**
+     * Elastic IP charge type. Possible values are: `year` as pay by year, `month` as pay by month, `dynamic` as pay by hour (specific permission required). (Default: `month`).
+     */
+    chargeType?: pulumi.Input<string>;
+    /**
+     * The duration that you will buy the resource. (Default: `1`). It is not required when `dynamic` (pay by hour), the value is `0` when `month`(pay by month) and the instance will be valid till the last day of that month.
+     */
+    duration?: pulumi.Input<number>;
+    /**
+     * Type of Elastic IP routes. Possible values are: `international` as international BGP IP and `bgp` as china mainland BGP IP.
+     */
+    internetType: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the EIP. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * A tag assigned to Elastic IP, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
 }

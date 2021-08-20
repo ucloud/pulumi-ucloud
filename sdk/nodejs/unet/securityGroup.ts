@@ -2,10 +2,47 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "../types/input";
-import * as outputs from "../types/output";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
+/**
+ * Provides a Security Group resource.
+ *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as ucloud from "@pulumi/ucloud";
+ *
+ * const example = new ucloud.unet.SecurityGroup("example", {
+ *     rules: [
+ *         // http access from LAN
+ *         {
+ *             cidrBlock: "192.168.0.0/16",
+ *             policy: "accept",
+ *             portRange: "80",
+ *             protocol: "tcp",
+ *         },
+ *         // https access from LAN
+ *         {
+ *             cidrBlock: "192.168.0.0/16",
+ *             policy: "accept",
+ *             portRange: "443",
+ *             protocol: "tcp",
+ *         },
+ *     ],
+ *     tag: "tf-example",
+ * });
+ * ```
+ *
+ * ## Import
+ *
+ * Security Group can be imported using the `id`, e.g.
+ *
+ * ```sh
+ *  $ pulumi import ucloud:unet/securityGroup:SecurityGroup example firewall-abc123456
+ * ```
+ */
 export class SecurityGroup extends pulumi.CustomResource {
     /**
      * Get an existing SecurityGroup resource's state with the given name, ID, and optional extra
@@ -14,6 +51,7 @@ export class SecurityGroup extends pulumi.CustomResource {
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
     public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: SecurityGroupState, opts?: pulumi.CustomResourceOptions): SecurityGroup {
         return new SecurityGroup(name, <any>state, { ...opts, id: id });
@@ -33,10 +71,22 @@ export class SecurityGroup extends pulumi.CustomResource {
         return obj['__pulumiType'] === SecurityGroup.__pulumiType;
     }
 
+    /**
+     * The time of creation of security group, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The remarks of the security group. (Default: `""`).
+     */
     public readonly remark!: pulumi.Output<string>;
+    /**
+     * A list of security group rules. Can be specified multiple times for each rules. See rules below for details on attributes.
+     */
     public readonly rules!: pulumi.Output<outputs.unet.SecurityGroupRule[]>;
+    /**
+     * A tag assigned to security group, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
     public readonly tag!: pulumi.Output<string | undefined>;
 
     /**
@@ -49,7 +99,8 @@ export class SecurityGroup extends pulumi.CustomResource {
     constructor(name: string, args: SecurityGroupArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: SecurityGroupArgs | SecurityGroupState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
+        opts = opts || {};
+        if (opts.id) {
             const state = argsOrState as SecurityGroupState | undefined;
             inputs["createTime"] = state ? state.createTime : undefined;
             inputs["name"] = state ? state.name : undefined;
@@ -58,7 +109,7 @@ export class SecurityGroup extends pulumi.CustomResource {
             inputs["tag"] = state ? state.tag : undefined;
         } else {
             const args = argsOrState as SecurityGroupArgs | undefined;
-            if (!args || args.rules === undefined) {
+            if ((!args || args.rules === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'rules'");
             }
             inputs["name"] = args ? args.name : undefined;
@@ -67,12 +118,8 @@ export class SecurityGroup extends pulumi.CustomResource {
             inputs["tag"] = args ? args.tag : undefined;
             inputs["createTime"] = undefined /*out*/;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
         super(SecurityGroup.__pulumiType, name, inputs, opts);
     }
@@ -82,19 +129,40 @@ export class SecurityGroup extends pulumi.CustomResource {
  * Input properties used for looking up and filtering SecurityGroup resources.
  */
 export interface SecurityGroupState {
-    readonly createTime?: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly rules?: pulumi.Input<pulumi.Input<inputs.unet.SecurityGroupRule>[]>;
-    readonly tag?: pulumi.Input<string>;
+    /**
+     * The time of creation of security group, formatted in RFC3339 time string.
+     */
+    createTime?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the security group. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * A list of security group rules. Can be specified multiple times for each rules. See rules below for details on attributes.
+     */
+    rules?: pulumi.Input<pulumi.Input<inputs.unet.SecurityGroupRule>[]>;
+    /**
+     * A tag assigned to security group, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
 }
 
 /**
  * The set of arguments for constructing a SecurityGroup resource.
  */
 export interface SecurityGroupArgs {
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly rules: pulumi.Input<pulumi.Input<inputs.unet.SecurityGroupRule>[]>;
-    readonly tag?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the security group. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * A list of security group rules. Can be specified multiple times for each rules. See rules below for details on attributes.
+     */
+    rules: pulumi.Input<pulumi.Input<inputs.unet.SecurityGroupRule>[]>;
+    /**
+     * A tag assigned to security group, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
 }

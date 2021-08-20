@@ -4,6 +4,34 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
+/**
+ * Provides a Subnet resource under VPC resource.
+ *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as ucloud from "@pulumi/ucloud";
+ *
+ * const _default = new ucloud.vpc.VPC("default", {
+ *     tag: "tf-example",
+ *     cidrBlocks: ["192.168.0.0/16"],
+ * });
+ * const example = new ucloud.vpc.Subnet("example", {
+ *     tag: "tf-example",
+ *     cidrBlock: "192.168.1.0/24",
+ *     vpcId: _default.id,
+ * });
+ * ```
+ *
+ * ## Import
+ *
+ * Subnet can be imported using the `id`, e.g.
+ *
+ * ```sh
+ *  $ pulumi import ucloud:vpc/subnet:Subnet example subnet-abc123456
+ * ```
+ */
 export class Subnet extends pulumi.CustomResource {
     /**
      * Get an existing Subnet resource's state with the given name, ID, and optional extra
@@ -12,6 +40,7 @@ export class Subnet extends pulumi.CustomResource {
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
     public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: SubnetState, opts?: pulumi.CustomResourceOptions): Subnet {
         return new Subnet(name, <any>state, { ...opts, id: id });
@@ -31,11 +60,26 @@ export class Subnet extends pulumi.CustomResource {
         return obj['__pulumiType'] === Subnet.__pulumiType;
     }
 
+    /**
+     * The cidr block of the desired subnet, format in "0.0.0.0/0", such as: `192.168.0.0/24`.
+     */
     public readonly cidrBlock!: pulumi.Output<string>;
+    /**
+     * The time of creation of subnet, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The remarks of the subnet. (Default: `""`).
+     */
     public readonly remark!: pulumi.Output<string>;
+    /**
+     * A tag assigned to subnet, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
     public readonly tag!: pulumi.Output<string | undefined>;
+    /**
+     * The id of the VPC that the desired subnet belongs to.
+     */
     public readonly vpcId!: pulumi.Output<string>;
 
     /**
@@ -48,7 +92,8 @@ export class Subnet extends pulumi.CustomResource {
     constructor(name: string, args: SubnetArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: SubnetArgs | SubnetState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
+        opts = opts || {};
+        if (opts.id) {
             const state = argsOrState as SubnetState | undefined;
             inputs["cidrBlock"] = state ? state.cidrBlock : undefined;
             inputs["createTime"] = state ? state.createTime : undefined;
@@ -58,10 +103,10 @@ export class Subnet extends pulumi.CustomResource {
             inputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as SubnetArgs | undefined;
-            if (!args || args.cidrBlock === undefined) {
+            if ((!args || args.cidrBlock === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'cidrBlock'");
             }
-            if (!args || args.vpcId === undefined) {
+            if ((!args || args.vpcId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'vpcId'");
             }
             inputs["cidrBlock"] = args ? args.cidrBlock : undefined;
@@ -71,12 +116,8 @@ export class Subnet extends pulumi.CustomResource {
             inputs["vpcId"] = args ? args.vpcId : undefined;
             inputs["createTime"] = undefined /*out*/;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
         super(Subnet.__pulumiType, name, inputs, opts);
     }
@@ -86,21 +127,48 @@ export class Subnet extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Subnet resources.
  */
 export interface SubnetState {
-    readonly cidrBlock?: pulumi.Input<string>;
-    readonly createTime?: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId?: pulumi.Input<string>;
+    /**
+     * The cidr block of the desired subnet, format in "0.0.0.0/0", such as: `192.168.0.0/24`.
+     */
+    cidrBlock?: pulumi.Input<string>;
+    /**
+     * The time of creation of subnet, formatted in RFC3339 time string.
+     */
+    createTime?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the subnet. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * A tag assigned to subnet, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The id of the VPC that the desired subnet belongs to.
+     */
+    vpcId?: pulumi.Input<string>;
 }
 
 /**
  * The set of arguments for constructing a Subnet resource.
  */
 export interface SubnetArgs {
-    readonly cidrBlock: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId: pulumi.Input<string>;
+    /**
+     * The cidr block of the desired subnet, format in "0.0.0.0/0", such as: `192.168.0.0/24`.
+     */
+    cidrBlock: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the subnet. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * A tag assigned to subnet, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The id of the VPC that the desired subnet belongs to.
+     */
+    vpcId: pulumi.Input<string>;
 }

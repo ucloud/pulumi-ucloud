@@ -4,53 +4,98 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
-export class Vip extends pulumi.CustomResource {
+/**
+ * Provides a VIP resource.
+ *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as ucloud from "@pulumi/ucloud";
+ *
+ * const fooVPC = new ucloud.vpc.VPC("fooVPC", {
+ *     tag: "tf-acc",
+ *     cidrBlocks: ["192.168.0.0/16"],
+ * });
+ * const fooSubnet = new ucloud.vpc.Subnet("fooSubnet", {
+ *     tag: "tf-acc",
+ *     cidrBlock: "192.168.1.0/24",
+ *     vpcId: fooVPC.id,
+ * });
+ * const fooVIP = new ucloud.vpc.VIP("fooVIP", {
+ *     vpcId: fooVPC.id,
+ *     subnetId: fooSubnet.id,
+ *     remark: "test",
+ * });
+ * ```
+ */
+export class VIP extends pulumi.CustomResource {
     /**
-     * Get an existing Vip resource's state with the given name, ID, and optional extra
+     * Get an existing VIP resource's state with the given name, ID, and optional extra
      * properties used to qualify the lookup.
      *
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
-    public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: VipState, opts?: pulumi.CustomResourceOptions): Vip {
-        return new Vip(name, <any>state, { ...opts, id: id });
+    public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: VIPState, opts?: pulumi.CustomResourceOptions): VIP {
+        return new VIP(name, <any>state, { ...opts, id: id });
     }
 
     /** @internal */
-    public static readonly __pulumiType = 'ucloud:vpc/vip:Vip';
+    public static readonly __pulumiType = 'ucloud:vpc/vIP:VIP';
 
     /**
-     * Returns true if the given object is an instance of Vip.  This is designed to work even
+     * Returns true if the given object is an instance of VIP.  This is designed to work even
      * when multiple copies of the Pulumi SDK have been loaded into the same process.
      */
-    public static isInstance(obj: any): obj is Vip {
+    public static isInstance(obj: any): obj is VIP {
         if (obj === undefined || obj === null) {
             return false;
         }
-        return obj['__pulumiType'] === Vip.__pulumiType;
+        return obj['__pulumiType'] === VIP.__pulumiType;
     }
 
+    /**
+     * The time of creation for VIP, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
+    /**
+     * The ip address of the VIP.
+     */
     public /*out*/ readonly ipAddress!: pulumi.Output<string>;
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The remarks of the VIP. (Default: `""`).
+     */
     public readonly remark!: pulumi.Output<string>;
+    /**
+     * The ID of subnet. If defined `vpcId`, the `subnetId` is Required.
+     */
     public readonly subnetId!: pulumi.Output<string>;
+    /**
+     * A tag assigned to VIP, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
     public readonly tag!: pulumi.Output<string | undefined>;
+    /**
+     * The ID of VPC linked to the VIP.
+     */
     public readonly vpcId!: pulumi.Output<string>;
 
     /**
-     * Create a Vip resource with the given unique name, arguments, and options.
+     * Create a VIP resource with the given unique name, arguments, and options.
      *
      * @param name The _unique_ name of the resource.
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args: VipArgs, opts?: pulumi.CustomResourceOptions)
-    constructor(name: string, argsOrState?: VipArgs | VipState, opts?: pulumi.CustomResourceOptions) {
+    constructor(name: string, args: VIPArgs, opts?: pulumi.CustomResourceOptions)
+    constructor(name: string, argsOrState?: VIPArgs | VIPState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
-            const state = argsOrState as VipState | undefined;
+        opts = opts || {};
+        if (opts.id) {
+            const state = argsOrState as VIPState | undefined;
             inputs["createTime"] = state ? state.createTime : undefined;
             inputs["ipAddress"] = state ? state.ipAddress : undefined;
             inputs["name"] = state ? state.name : undefined;
@@ -59,11 +104,11 @@ export class Vip extends pulumi.CustomResource {
             inputs["tag"] = state ? state.tag : undefined;
             inputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
-            const args = argsOrState as VipArgs | undefined;
-            if (!args || args.subnetId === undefined) {
+            const args = argsOrState as VIPArgs | undefined;
+            if ((!args || args.subnetId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'subnetId'");
             }
-            if (!args || args.vpcId === undefined) {
+            if ((!args || args.vpcId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'vpcId'");
             }
             inputs["name"] = args ? args.name : undefined;
@@ -74,37 +119,63 @@ export class Vip extends pulumi.CustomResource {
             inputs["createTime"] = undefined /*out*/;
             inputs["ipAddress"] = undefined /*out*/;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
-        super(Vip.__pulumiType, name, inputs, opts);
+        super(VIP.__pulumiType, name, inputs, opts);
     }
 }
 
 /**
- * Input properties used for looking up and filtering Vip resources.
+ * Input properties used for looking up and filtering VIP resources.
  */
-export interface VipState {
-    readonly createTime?: pulumi.Input<string>;
-    readonly ipAddress?: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly subnetId?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId?: pulumi.Input<string>;
+export interface VIPState {
+    /**
+     * The time of creation for VIP, formatted in RFC3339 time string.
+     */
+    createTime?: pulumi.Input<string>;
+    /**
+     * The ip address of the VIP.
+     */
+    ipAddress?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the VIP. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * The ID of subnet. If defined `vpcId`, the `subnetId` is Required.
+     */
+    subnetId?: pulumi.Input<string>;
+    /**
+     * A tag assigned to VIP, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The ID of VPC linked to the VIP.
+     */
+    vpcId?: pulumi.Input<string>;
 }
 
 /**
- * The set of arguments for constructing a Vip resource.
+ * The set of arguments for constructing a VIP resource.
  */
-export interface VipArgs {
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly subnetId: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly vpcId: pulumi.Input<string>;
+export interface VIPArgs {
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the VIP. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * The ID of subnet. If defined `vpcId`, the `subnetId` is Required.
+     */
+    subnetId: pulumi.Input<string>;
+    /**
+     * A tag assigned to VIP, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The ID of VPC linked to the VIP.
+     */
+    vpcId: pulumi.Input<string>;
 }

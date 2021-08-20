@@ -2,92 +2,222 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "../types/input";
-
+import { input as inputs, output as outputs } from "../types";
 
 export namespace ipsecvpn {
-    export interface VpnConnectionIkeConfig {
+    export interface VPNConnectionIkeConfig {
+        /**
+         * The authentication algorithm of IPSec negotiation. Possible values: `sha1`, `md5`. (Default: `sha1`)
+         */
         authenticationAlgorithm?: pulumi.Input<string>;
+        /**
+         * The Diffie-Hellman group used by IKE negotiation. Possible values: `1`, `2`, `5`, `14`, `15`, `16`. (Default:`15`)
+         */
         dhGroup?: pulumi.Input<string>;
+        /**
+         * The encryption algorithm of IPSec negotiation. Possible values: `aes128`, `aes192`, `aes256`, `aes512`, `3des`. (Default: `aes128`).
+         */
         encryptionAlgorithm?: pulumi.Input<string>;
+        /**
+         * The negotiation exchange mode of IKE V1 of VPN gateway. Possible values: `main` (main mode), `aggressive` (aggressive mode). (Default: `main`)
+         */
         exchangeMode?: pulumi.Input<string>;
+        /**
+         * The version of the IKE protocol which only be supported IKE V1 protocol at present. Possible values: ikev1. (Default: ikev1)
+         */
         ikeVersion?: pulumi.Input<string>;
+        /**
+         * The identification of the VPN gateway.
+         */
         localId?: pulumi.Input<string>;
+        /**
+         * The key used for authentication between the VPN gateway and the Customer gateway which contains 1-128 characters and only support English, numbers and special characters: `!@#$%^&*()_+-=[]:,./'~`.
+         */
         preSharedKey: pulumi.Input<string>;
+        /**
+         * The identification of the Customer gateway.
+         */
         remoteId?: pulumi.Input<string>;
+        /**
+         * The Security Association lifecycle as the result of IPSec negotiation. Unit: second. Range: 1200-604800. (Default: `3600`)
+         */
         saLifeTime?: pulumi.Input<number>;
     }
 
-    export interface VpnConnectionIpsecConfig {
+    export interface VPNConnectionIpsecConfig {
+        /**
+         * The authentication algorithm of IPSec negotiation. Possible values: `sha1`, `md5`. (Default: `sha1`)
+         */
         authenticationAlgorithm?: pulumi.Input<string>;
+        /**
+         * The encryption algorithm of IPSec negotiation. Possible values: `aes128`, `aes192`, `aes256`, `aes512`, `3des`. (Default: `aes128`).
+         */
         encryptionAlgorithm?: pulumi.Input<string>;
+        /**
+         * The id list of Local subnet.
+         */
         localSubnetIds: pulumi.Input<pulumi.Input<string>[]>;
+        /**
+         * Whether the PFS of IPSec negotiation is on or off, `disable` as off, The Diffie-Hellman group as open.  Possible values: `disable`, `1`, `2`, `5`, `14`, `15`, `16`. (Default:`disable`)
+         */
         pfsDhGroup?: pulumi.Input<string>;
+        /**
+         * The security protocol of IPSec negotiation. Possible values: `esp`, `ah`. (Default:`esp`)
+         */
         protocol?: pulumi.Input<string>;
+        /**
+         * The ip address list of remote subnet.
+         */
         remoteSubnets: pulumi.Input<pulumi.Input<string>[]>;
+        /**
+         * The Security Association lifecycle as the result of IPSec negotiation. Unit: second. Range: 1200-604800. (Default: `3600`)
+         */
         saLifeTime?: pulumi.Input<number>;
+        /**
+         * The Security Association lifecycle in bytes as the result of IPSec negotiation. Unit: second. Range: 1200-604800. (Default: `3600`)
+         */
         saLifeTimeBytes?: pulumi.Input<number>;
     }
+}
+
+export namespace uaccount {
 }
 
 export namespace udb {
 }
 
+export namespace udisk {
+}
+
 export namespace uhost {
+    export interface InstanceDataDisks {
+        /**
+         * The size of the cloud data disk, range 20-8000, measured in GB (GigaByte).
+         */
+        size: pulumi.Input<number>;
+        /**
+         * The type of the cloud data disk. Possible values are: `cloudNormal` and `cloudSsd` for local boot disk, `cloudSsd` for cloud SSD boot disk.
+         */
+        type: pulumi.Input<string>;
+    }
+
     export interface InstanceDiskSet {
+        /**
+         * The ID of disk.
+         */
         id?: pulumi.Input<string>;
+        /**
+         * Specifies whether boot disk or not.
+         */
         isBoot?: pulumi.Input<boolean>;
+        /**
+         * The size of the cloud data disk, range 20-8000, measured in GB (GigaByte).
+         */
         size?: pulumi.Input<number>;
+        /**
+         * The type of the cloud data disk. Possible values are: `cloudNormal` and `cloudSsd` for local boot disk, `cloudSsd` for cloud SSD boot disk.
+         */
         type?: pulumi.Input<string>;
     }
 
     export interface InstanceIpSet {
+        /**
+         * Type of Elastic IP routes. Possible values are: `International` as international BGP IP, `BGP` as china BGP IP and `Private` as private IP.
+         */
         internetType?: pulumi.Input<string>;
+        /**
+         * Elastic IP address.
+         */
         ip?: pulumi.Input<string>;
     }
 }
 
 export namespace ulb {
-    export interface LbIpSet {
+    export interface LBIpSet {
+        /**
+         * Type of Elastic IP routes.
+         */
         internetType?: pulumi.Input<string>;
+        /**
+         * Elastic IP address.
+         */
         ip?: pulumi.Input<string>;
     }
 }
 
 export namespace umem {
-    export interface MemcacheInstanceIpSet {
+    export interface MemcachedInstanceIpSet {
+        /**
+         * The virtual ip of Memcache instance.
+         */
         ip?: pulumi.Input<string>;
+        /**
+         * The port on which Memcache instance accepts connections, it is 6379 by default.
+         */
         port?: pulumi.Input<number>;
     }
 
     export interface RedisInstanceIpSet {
+        /**
+         * The virtual ip of Redis instance.
+         */
         ip?: pulumi.Input<string>;
+        /**
+         * The port on which Redis instance accepts connections, it is 6379 by default.
+         */
         port?: pulumi.Input<number>;
     }
 }
 
 export namespace unet {
-    export interface EipIpSet {
+    export interface EIPIpSet {
+        /**
+         * Type of Elastic IP routes. Possible values are: `international` as international BGP IP and `bgp` as china mainland BGP IP.
+         */
         internetType?: pulumi.Input<string>;
         ip?: pulumi.Input<string>;
     }
 
-    export interface EipResource {
+    export interface EIPResource {
+        /**
+         * The ID of the resource with EIP attached.
+         */
         id?: pulumi.Input<string>;
+        /**
+         * The type of resource with EIP attached. Possible values are `instance` as instance, `lb` as load balancer.
+         */
         type?: pulumi.Input<string>;
     }
 
     export interface SecurityGroupRule {
+        /**
+         * The cidr block of source.
+         */
         cidrBlock?: pulumi.Input<string>;
+        /**
+         * Authorization policy. Possible values are: `accept`, `drop`.
+         */
         policy?: pulumi.Input<string>;
+        /**
+         * The range of port numbers, range: 1-65535. (eg: `port` or `port1-port2`).
+         */
         portRange?: pulumi.Input<string>;
+        /**
+         * Rule priority. Possible values are: `high`, `medium`, `low`.
+         */
         priority?: pulumi.Input<string>;
+        /**
+         * The protocol. Possible values are: `tcp`, `udp`, `icmp`, `gre`.
+         */
         protocol?: pulumi.Input<string>;
     }
 }
 
 export namespace vpc {
-    export interface VpcNetworkInfo {
+    export interface VPCNetworkInfo {
+        /**
+         * The CIDR block of the VPC.
+         */
         cidrBlock?: pulumi.Input<string>;
     }
 }

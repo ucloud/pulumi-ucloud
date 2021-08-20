@@ -2,57 +2,101 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "../types/input";
-import * as outputs from "../types/output";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
-export class Vpc extends pulumi.CustomResource {
+/**
+ * Provides a VPC resource.
+ *
+ * > **Note**  The network segment can only be created or deleted, can not perform both of them at the same time.
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as ucloud from "@pulumi/ucloud";
+ *
+ * const example = new ucloud.vpc.VPC("example", {
+ *     // vpc network
+ *     cidrBlocks: ["192.168.0.0/16"],
+ *     tag: "tf-example",
+ * });
+ * ```
+ *
+ * ## Import
+ *
+ * VPC can be imported using the `id`, e.g.
+ *
+ * ```sh
+ *  $ pulumi import ucloud:vpc/vPC:VPC example uvnet-abc123456
+ * ```
+ */
+export class VPC extends pulumi.CustomResource {
     /**
-     * Get an existing Vpc resource's state with the given name, ID, and optional extra
+     * Get an existing VPC resource's state with the given name, ID, and optional extra
      * properties used to qualify the lookup.
      *
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
-    public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: VpcState, opts?: pulumi.CustomResourceOptions): Vpc {
-        return new Vpc(name, <any>state, { ...opts, id: id });
+    public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: VPCState, opts?: pulumi.CustomResourceOptions): VPC {
+        return new VPC(name, <any>state, { ...opts, id: id });
     }
 
     /** @internal */
-    public static readonly __pulumiType = 'ucloud:vpc/vpc:Vpc';
+    public static readonly __pulumiType = 'ucloud:vpc/vPC:VPC';
 
     /**
-     * Returns true if the given object is an instance of Vpc.  This is designed to work even
+     * Returns true if the given object is an instance of VPC.  This is designed to work even
      * when multiple copies of the Pulumi SDK have been loaded into the same process.
      */
-    public static isInstance(obj: any): obj is Vpc {
+    public static isInstance(obj: any): obj is VPC {
         if (obj === undefined || obj === null) {
             return false;
         }
-        return obj['__pulumiType'] === Vpc.__pulumiType;
+        return obj['__pulumiType'] === VPC.__pulumiType;
     }
 
+    /**
+     * The CIDR blocks of VPC.
+     */
     public readonly cidrBlocks!: pulumi.Output<string[]>;
+    /**
+     * The time of creation for VPC, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     public readonly name!: pulumi.Output<string>;
-    public /*out*/ readonly networkInfos!: pulumi.Output<outputs.vpc.VpcNetworkInfo[]>;
+    /**
+     * It is a nested type which documented below.
+     */
+    public /*out*/ readonly networkInfos!: pulumi.Output<outputs.vpc.VPCNetworkInfo[]>;
+    /**
+     * The remarks of the VPC. (Default: `""`).
+     */
     public readonly remark!: pulumi.Output<string>;
+    /**
+     * A tag assigned to VPC, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
     public readonly tag!: pulumi.Output<string | undefined>;
+    /**
+     * The time whenever there is a change made to VPC, formatted in RFC3339 time string.
+     */
     public /*out*/ readonly updateTime!: pulumi.Output<string>;
 
     /**
-     * Create a Vpc resource with the given unique name, arguments, and options.
+     * Create a VPC resource with the given unique name, arguments, and options.
      *
      * @param name The _unique_ name of the resource.
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args: VpcArgs, opts?: pulumi.CustomResourceOptions)
-    constructor(name: string, argsOrState?: VpcArgs | VpcState, opts?: pulumi.CustomResourceOptions) {
+    constructor(name: string, args: VPCArgs, opts?: pulumi.CustomResourceOptions)
+    constructor(name: string, argsOrState?: VPCArgs | VPCState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
-            const state = argsOrState as VpcState | undefined;
+        opts = opts || {};
+        if (opts.id) {
+            const state = argsOrState as VPCState | undefined;
             inputs["cidrBlocks"] = state ? state.cidrBlocks : undefined;
             inputs["createTime"] = state ? state.createTime : undefined;
             inputs["name"] = state ? state.name : undefined;
@@ -61,8 +105,8 @@ export class Vpc extends pulumi.CustomResource {
             inputs["tag"] = state ? state.tag : undefined;
             inputs["updateTime"] = state ? state.updateTime : undefined;
         } else {
-            const args = argsOrState as VpcArgs | undefined;
-            if (!args || args.cidrBlocks === undefined) {
+            const args = argsOrState as VPCArgs | undefined;
+            if ((!args || args.cidrBlocks === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'cidrBlocks'");
             }
             inputs["cidrBlocks"] = args ? args.cidrBlocks : undefined;
@@ -73,36 +117,59 @@ export class Vpc extends pulumi.CustomResource {
             inputs["networkInfos"] = undefined /*out*/;
             inputs["updateTime"] = undefined /*out*/;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
-        super(Vpc.__pulumiType, name, inputs, opts);
+        super(VPC.__pulumiType, name, inputs, opts);
     }
 }
 
 /**
- * Input properties used for looking up and filtering Vpc resources.
+ * Input properties used for looking up and filtering VPC resources.
  */
-export interface VpcState {
-    readonly cidrBlocks?: pulumi.Input<pulumi.Input<string>[]>;
-    readonly createTime?: pulumi.Input<string>;
-    readonly name?: pulumi.Input<string>;
-    readonly networkInfos?: pulumi.Input<pulumi.Input<inputs.vpc.VpcNetworkInfo>[]>;
-    readonly remark?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
-    readonly updateTime?: pulumi.Input<string>;
+export interface VPCState {
+    /**
+     * The CIDR blocks of VPC.
+     */
+    cidrBlocks?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * The time of creation for VPC, formatted in RFC3339 time string.
+     */
+    createTime?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * It is a nested type which documented below.
+     */
+    networkInfos?: pulumi.Input<pulumi.Input<inputs.vpc.VPCNetworkInfo>[]>;
+    /**
+     * The remarks of the VPC. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * A tag assigned to VPC, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
+    /**
+     * The time whenever there is a change made to VPC, formatted in RFC3339 time string.
+     */
+    updateTime?: pulumi.Input<string>;
 }
 
 /**
- * The set of arguments for constructing a Vpc resource.
+ * The set of arguments for constructing a VPC resource.
  */
-export interface VpcArgs {
-    readonly cidrBlocks: pulumi.Input<pulumi.Input<string>[]>;
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
-    readonly tag?: pulumi.Input<string>;
+export interface VPCArgs {
+    /**
+     * The CIDR blocks of VPC.
+     */
+    cidrBlocks: pulumi.Input<pulumi.Input<string>[]>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the VPC. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
+    /**
+     * A tag assigned to VPC, which contains at most 63 characters and only support Chinese, English, numbers, '-', '_', and '.'. If it is not filled in or a empty string is filled in, then default tag will be assigned. (Default: `Default`).
+     */
+    tag?: pulumi.Input<string>;
 }

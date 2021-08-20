@@ -2,7 +2,6 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as outputs from "./types/output";
 import * as utilities from "./utilities";
 
 /**
@@ -10,8 +9,6 @@ import * as utilities from "./utilities";
  * settings, however an explicit `Provider` instance may be created and passed during resource
  * construction to achieve fine-grained programmatic control over provider settings. See the
  * [documentation](https://www.pulumi.com/docs/reference/programming-model/#providers) for more information.
- *
- * > This content is derived from https://github.com/terraform-providers/terraform-provider-ucloud/blob/master/website/docs/index.html.markdown.
  */
 export class Provider extends pulumi.ProviderResource {
     /** @internal */
@@ -28,6 +25,34 @@ export class Provider extends pulumi.ProviderResource {
         return obj['__pulumiType'] === Provider.__pulumiType;
     }
 
+    /**
+     * ...
+     */
+    public readonly baseUrl!: pulumi.Output<string | undefined>;
+    /**
+     * ...
+     */
+    public readonly privateKey!: pulumi.Output<string | undefined>;
+    /**
+     * ...
+     */
+    public readonly profile!: pulumi.Output<string | undefined>;
+    /**
+     * ...
+     */
+    public readonly projectId!: pulumi.Output<string | undefined>;
+    /**
+     * ...
+     */
+    public readonly publicKey!: pulumi.Output<string | undefined>;
+    /**
+     * ...
+     */
+    public readonly region!: pulumi.Output<string | undefined>;
+    /**
+     * ...
+     */
+    public readonly sharedCredentialsFile!: pulumi.Output<string | undefined>;
 
     /**
      * Create a Provider resource with the given unique name, arguments, and options.
@@ -38,23 +63,20 @@ export class Provider extends pulumi.ProviderResource {
      */
     constructor(name: string, args?: ProviderArgs, opts?: pulumi.ResourceOptions) {
         let inputs: pulumi.Inputs = {};
+        opts = opts || {};
         {
             inputs["baseUrl"] = args ? args.baseUrl : undefined;
             inputs["insecure"] = pulumi.output(args ? args.insecure : undefined).apply(JSON.stringify);
             inputs["maxRetries"] = pulumi.output(args ? args.maxRetries : undefined).apply(JSON.stringify);
-            inputs["privateKey"] = (args ? args.privateKey : undefined) || utilities.getEnv("UCLOUD_PRIVATE_KEY", "UCloud Private Key");
-            inputs["profile"] = (args ? args.profile : undefined) || utilities.getEnv("UCLOUD_PROFILE", "UCloud Profile Name");
-            inputs["projectId"] = (args ? args.projectId : undefined) || utilities.getEnv("UCLOUD_PROJECT_ID", "UCloud Project Id");
-            inputs["publicKey"] = (args ? args.publicKey : undefined) || utilities.getEnv("UCLOUD_PUBLIC_KEY", "UCloud Public Key");
-            inputs["region"] = (args ? args.region : undefined) || utilities.getEnv("UCLOUD_REGION", "UCLOUD_DEFAULT_REGION");
-            inputs["sharedCredentialsFile"] = (args ? args.sharedCredentialsFile : undefined) || utilities.getEnv("UCLOUD_SHARED_CREDENTIAL_FILE", "Path To The Shared Credentials File");
+            inputs["privateKey"] = (args ? args.privateKey : undefined) ?? utilities.getEnv("UCLOUD_PRIVATE_KEY");
+            inputs["profile"] = (args ? args.profile : undefined) ?? utilities.getEnv("UCLOUD_PROFILE");
+            inputs["projectId"] = (args ? args.projectId : undefined) ?? utilities.getEnv("UCLOUD_PROJECT_ID");
+            inputs["publicKey"] = (args ? args.publicKey : undefined) ?? utilities.getEnv("UCLOUD_PUBLIC_KEY");
+            inputs["region"] = (args ? args.region : undefined) ?? utilities.getEnv("UCLOUD_REGION");
+            inputs["sharedCredentialsFile"] = (args ? args.sharedCredentialsFile : undefined) ?? utilities.getEnv("UCLOUD_SHARED_CREDENTIAL_FILE");
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
         super(Provider.__pulumiType, name, inputs, opts);
     }
@@ -67,37 +89,37 @@ export interface ProviderArgs {
     /**
      * ...
      */
-    readonly baseUrl?: pulumi.Input<string>;
+    baseUrl?: pulumi.Input<string>;
     /**
      * ...
      */
-    readonly insecure?: pulumi.Input<boolean>;
+    insecure?: pulumi.Input<boolean>;
     /**
      * ...
      */
-    readonly maxRetries?: pulumi.Input<number>;
+    maxRetries?: pulumi.Input<number>;
     /**
      * ...
      */
-    readonly privateKey?: pulumi.Input<string>;
+    privateKey?: pulumi.Input<string>;
     /**
      * ...
      */
-    readonly profile?: pulumi.Input<string>;
+    profile?: pulumi.Input<string>;
     /**
      * ...
      */
-    readonly projectId?: pulumi.Input<string>;
+    projectId?: pulumi.Input<string>;
     /**
      * ...
      */
-    readonly publicKey?: pulumi.Input<string>;
+    publicKey?: pulumi.Input<string>;
     /**
      * ...
      */
-    readonly region?: pulumi.Input<string>;
+    region?: pulumi.Input<string>;
     /**
      * ...
      */
-    readonly sharedCredentialsFile?: pulumi.Input<string>;
+    sharedCredentialsFile?: pulumi.Input<string>;
 }

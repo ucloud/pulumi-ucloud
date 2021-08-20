@@ -11,65 +11,43 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/pulumi/pulumi/pkg/testing/integration"
+	"github.com/pulumi/pulumi/pkg/v3/testing/integration"
 )
-
-func TestExamples(t *testing.T) {
-	// Ensure we have any required configuration points
-	region := os.Getenv("UCLOUD_REGION")
-	if region == "" {
-		t.Skipf("Skipping test due to missing AWS_REGION environment variable")
-	}
-	// cwd, err := os.Getwd()
-	// if !assert.NoError(t, err, "expected a valid working directory: %v", err) {
-	// 	return
-	// }
-
-	// base options shared amongst all tests.
-	base := integration.ProgramTestOptions{
-		Config: map[string]string{
-			// Configuration map
-		},
-		Tracing: "https://tracing.pulumi-engineering.com/collector/api/v1/spans",
-	}
-	_ = base.With(integration.ProgramTestOptions{
-		Dependencies: []string{
-			// JavaScript dependencies
-		},
-	})
-
-	examples := []integration.ProgramTestOptions{
-		// List each test
-		// baseJS.With(integration.ProgramTestOptions{
-		// 	Dir: path.Join(cwd, "api"),
-		// 	ExtraRuntimeValidation: validateAPITest(func(body string) {
-		// 		assert.Equal(t, "Hello, world!", body)
-		// 	}),
-		// 	EditDirs: []integration.EditDir{{
-		// 		Dir:      "./api/step2",
-		// 		Additive: true,
-		// 		ExtraRuntimeValidation: validateAPITest(func(body string) {
-		// 			assert.Equal(t, "<h1>Hello world!</h1>", body)
-		// 		}),
-		// 	}},
-		// 	ExpectRefreshChanges: true,
-		// }),
-	}
-
-	if !testing.Short() {
-		// Append any longer running tests
-	}
-
-	for _, ex := range examples {
-		example := ex
-		t.Run(example.Dir, func(t *testing.T) {
-			integration.ProgramTest(t, &example)
-		})
-	}
-}
 
 func createEditDir(dir string) integration.EditDir {
 	return integration.EditDir{Dir: dir, ExtraRuntimeValidation: nil}
+}
+
+func skipIfShort(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping long-running test in short mode")
+	}
+}
+
+func getEnvRegion(t *testing.T) string {
+	envRegion := os.Getenv("UCLOUD_REGION")
+	if envRegion == "" {
+		t.Skipf("Skipping test due to missing UCLOUD_REGION environment variable")
+	}
+
+	return envRegion
+}
+
+func getCwd(t *testing.T) string {
+	cwd, err := os.Getwd()
+	if err != nil {
+		t.FailNow()
+	}
+
+	return cwd
+}
+
+func getBaseOptions() integration.ProgramTestOptions {
+	return integration.ProgramTestOptions{
+		ExpectRefreshChanges: true,
+		SkipRefresh:          true,
+		Quick:                true,
+	}
 }
 
 func validateAPITest(isValid func(body string)) func(t *testing.T, stack integration.RuntimeValidationStackInfo) {
@@ -78,8 +56,8 @@ func validateAPITest(isValid func(body string)) func(t *testing.T, stack integra
 		var err error
 		url := stack.Outputs["url"].(string)
 		// Retry a couple times on 5xx
-		for i := 0; i < 2; i++ {
-			resp, err = http.Get(url + "/b")
+		for i := 0; i < 5; i++ {
+			resp, err = http.Get(url)
 			if !assert.NoError(t, err) {
 				return
 			}

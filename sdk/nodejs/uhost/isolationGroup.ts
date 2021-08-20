@@ -2,10 +2,30 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
-import * as inputs from "../types/input";
-import * as outputs from "../types/output";
 import * as utilities from "../utilities";
 
+/**
+ * Provides an Isolation Group resource. The Isolation Group is a logical group of UHost instance, which ensure that each UHost instance within a group is on a different physical machine. Up to seven UHost instance can be added per isolation group in a single availability_zone.
+ *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as ucloud from "@pulumi/ucloud";
+ *
+ * const foo = new ucloud.uhost.IsolationGroup("foo", {
+ *     remark: "test",
+ * });
+ * ```
+ *
+ * ## Import
+ *
+ * Isolation Group can be imported using the `id`, e.g.
+ *
+ * ```sh
+ *  $ pulumi import ucloud:uhost/isolationGroup:IsolationGroup example ig-abc123456
+ * ```
+ */
 export class IsolationGroup extends pulumi.CustomResource {
     /**
      * Get an existing IsolationGroup resource's state with the given name, ID, and optional extra
@@ -14,6 +34,7 @@ export class IsolationGroup extends pulumi.CustomResource {
      * @param name The _unique_ name of the resulting resource.
      * @param id The _unique_ provider ID of the resource to lookup.
      * @param state Any extra arguments used during the lookup.
+     * @param opts Optional settings to control the behavior of the CustomResource.
      */
     public static get(name: string, id: pulumi.Input<pulumi.ID>, state?: IsolationGroupState, opts?: pulumi.CustomResourceOptions): IsolationGroup {
         return new IsolationGroup(name, <any>state, { ...opts, id: id });
@@ -34,6 +55,9 @@ export class IsolationGroup extends pulumi.CustomResource {
     }
 
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The remarks of the isolation group. (Default: `""`).
+     */
     public readonly remark!: pulumi.Output<string>;
 
     /**
@@ -46,7 +70,8 @@ export class IsolationGroup extends pulumi.CustomResource {
     constructor(name: string, args?: IsolationGroupArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: IsolationGroupArgs | IsolationGroupState, opts?: pulumi.CustomResourceOptions) {
         let inputs: pulumi.Inputs = {};
-        if (opts && opts.id) {
+        opts = opts || {};
+        if (opts.id) {
             const state = argsOrState as IsolationGroupState | undefined;
             inputs["name"] = state ? state.name : undefined;
             inputs["remark"] = state ? state.remark : undefined;
@@ -55,12 +80,8 @@ export class IsolationGroup extends pulumi.CustomResource {
             inputs["name"] = args ? args.name : undefined;
             inputs["remark"] = args ? args.remark : undefined;
         }
-        if (!opts) {
-            opts = {}
-        }
-
         if (!opts.version) {
-            opts.version = utilities.getVersion();
+            opts = pulumi.mergeOptions(opts, { version: utilities.getVersion()});
         }
         super(IsolationGroup.__pulumiType, name, inputs, opts);
     }
@@ -70,14 +91,20 @@ export class IsolationGroup extends pulumi.CustomResource {
  * Input properties used for looking up and filtering IsolationGroup resources.
  */
 export interface IsolationGroupState {
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the isolation group. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
 }
 
 /**
  * The set of arguments for constructing a IsolationGroup resource.
  */
 export interface IsolationGroupArgs {
-    readonly name?: pulumi.Input<string>;
-    readonly remark?: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
+    /**
+     * The remarks of the isolation group. (Default: `""`).
+     */
+    remark?: pulumi.Input<string>;
 }
