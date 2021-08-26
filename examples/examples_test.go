@@ -9,20 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/pulumi/pulumi/pkg/v3/testing/integration"
+	"github.com/stretchr/testify/assert"
 )
-
-func createEditDir(dir string) integration.EditDir {
-	return integration.EditDir{Dir: dir, ExtraRuntimeValidation: nil}
-}
-
-func skipIfShort(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping long-running test in short mode")
-	}
-}
 
 func getEnvRegion(t *testing.T) string {
 	envRegion := os.Getenv("UCLOUD_REGION")
@@ -38,15 +27,16 @@ func getCwd(t *testing.T) string {
 	if err != nil {
 		t.FailNow()
 	}
-
 	return cwd
 }
 
-func getBaseOptions() integration.ProgramTestOptions {
+func getBaseOptions(t *testing.T) integration.ProgramTestOptions {
+	region := getEnvRegion(t)
 	return integration.ProgramTestOptions{
 		ExpectRefreshChanges: true,
-		SkipRefresh:          true,
-		Quick:                true,
+		Config: map[string]string{
+			"ucloud:region": region,
+		},
 	}
 }
 
